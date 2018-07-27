@@ -23,7 +23,7 @@ class Document(ElementProxy):
 
     __slots__ = ('_part', '__body')
 
-    def __init__(self, element, part, fudge_markers = True):
+    def __init__(self, element, part, fudge_markers = False):
         super(Document, self).__init__(element)
         self._part = part
         self.__body = None
