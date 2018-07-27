@@ -146,7 +146,7 @@ class Document(ElementProxy):
         # Overwrite the existing representation of the text in 
         for par,num in zip(self.paragraphs,para_nums):
             if num is None: continue
-            print(num, par.text)
+            #print(num, par.text)
             par.text = " ".join([num+")",
                                  "" if par.text is None else par.text])
 
