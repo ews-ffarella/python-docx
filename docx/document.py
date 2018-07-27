@@ -23,10 +23,11 @@ class Document(ElementProxy):
 
     __slots__ = ('_part', '__body')
 
-    def __init__(self, element, part):
+    def __init__(self, element, part, fudge_markers = True):
         super(Document, self).__init__(element)
         self._part = part
         self.__body = None
+        if fudge_markers: self.fudge_list_markers()
 
     def add_heading(self, text='', level=1):
         """
@@ -99,6 +100,55 @@ class Document(ElementProxy):
         table = self._body.add_table(rows, cols, self._block_width)
         table.style = style
         return table
+
+    def fudge_list_markers(self):
+        """
+        Create fake list markers and overwrite paragraphs with list markers 
+        that are list markers. 
+        """
+        
+        # dig up id of enumeration and indentation level for each paragraph 
+        # (iff relevant)
+        paras_numPr = [p._element.xpath(".//w:numPr") 
+                       for p in self.paragraphs]
+        try:
+            get = lambda pth, x: x.xpath(pth)[0].attrib.values()[0]
+            para_num_groups = [(get(".//w:numId",p[0]),
+                                get(".//w:ilvl",p[0])) if p 
+                               else None 
+                               for p in paras_numPr]
+        except:
+            # Abort silently.
+            #self.fudge_status = "Aborted at search for numIds."
+            return
+        
+        # Generate a surface representation of each enumeration, at each
+        # point in that enumeration.
+        enumerations = {}
+        para_nums = []
+        for g in para_num_groups:
+            if g is None: 
+                para_nums.append(None)
+                continue
+
+            # retain the enumeration for future groups
+            if g in enumerations: enumerations[g] += 1 
+            else: enumerations[g] = 1
+            
+            # TODO: integrate enumeration types (digital, alpha, roman, etc.)
+            # from style file
+            para_nums.append(unicode(enumerations[g]))
+        
+        #print zip(paras_numPr,para_num_groups,para_nums)
+        
+        #self.fudge_freq += len([n for n in para_nums if n is not None])
+
+        # Overwrite the existing representation of the text in 
+        for par,num in zip(self.paragraphs,para_nums):
+            if num is None: continue
+            print(num, par.text)
+            par.text = " ".join([num+")",
+                                 "" if par.text is None else par.text])
 
     @property
     def core_properties(self):
