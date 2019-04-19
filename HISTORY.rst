@@ -2,7 +2,13 @@
 
 Release History
 ---------------
-
+0.2 (2019-04-19)
+++++++++++++++++++
+- Change versioning scheme to depart from official repo
+- Add insert_paragraph_after capability to support inserting a paragraph after an existing paragraph
+0.8.6bb (2018)
+++++++++++++++++++
+- Add several Blackboiler required capabilities - adding runs, styling
 0.8.6 (2016-06-22)
 ++++++++++++++++++
 
