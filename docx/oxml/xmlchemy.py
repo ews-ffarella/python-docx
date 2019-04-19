@@ -722,7 +722,13 @@ class _OxmlElementBase(etree.ElementBase):
         else:
             self.append(elm)
         return elm
-
+    def insert_element_after(self, elm, *tagnames):
+        successor = self.first_child_found_in(*tagnames)
+        if successor is not None:
+            successor.addnext(elm)
+        else:
+            self.append(elm)
+        return elm
     def remove_all(self, *tagnames):
         """
         Remove all child elements whose tagname (e.g. 'a:p') appears in
