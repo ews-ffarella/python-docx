@@ -20,6 +20,13 @@ class CT_P(BaseOxmlElement):
     def _insert_pPr(self, pPr):
         self.insert(0, pPr)
         return pPr
+    def add_p_after(self):
+        """
+        Return a new ``<w:p>`` element inserted directly prior to this one.
+        """
+        new_p = OxmlElement('w:p')
+        self.addnext(new_p)
+        return new_p
 
     def add_p_before(self):
         """
@@ -74,7 +81,19 @@ class CT_P(BaseOxmlElement):
             return None
         return pPr.style
 
+    def copy_ppr(self,pprCopy):
+        pPr = self.get_or_add_pPr()
+        if not pprCopy is None:
+            for p in pprCopy[:]:
+                pPr.append(p)
     @style.setter
     def style(self, style):
         pPr = self.get_or_add_pPr()
         pPr.style = style
+    @property
+    def ppr(self):
+        return self.pPr
+
+    @ppr.setter
+    def ppr(self, value):
+        self. copy_ppr(value)
