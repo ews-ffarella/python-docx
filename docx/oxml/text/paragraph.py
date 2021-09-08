@@ -142,10 +142,12 @@ class CT_P(BaseOxmlElement):
         if not pprCopy is None:
             for p in pprCopy[:]:
                 pPr.append(p)
+
     @style.setter
     def style(self, style):
         pPr = self.get_or_add_pPr()
         pPr.style = style
+
     @property
     def ppr(self):
         return self.pPr

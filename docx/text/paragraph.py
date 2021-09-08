@@ -34,6 +34,7 @@ class Paragraph(Parented):
             irun.add_text(text)
 
         return irun
+
     def add_del(self, deltext=None):
 
         d = self._p.add_d()
@@ -43,6 +44,7 @@ class Paragraph(Parented):
             drun.add_text(deltext)
 
         return drun
+
     def add_run(self, text=None, style=None):
         """
         Append a run to this paragraph containing *text* and having character
@@ -58,7 +60,6 @@ class Paragraph(Parented):
             run.text = text
         if style:
             run.style = style
-
         return run
     
     def delete(self):

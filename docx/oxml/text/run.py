@@ -342,3 +342,5 @@ class _RunContentAppender(object):
         if text:
             self._r.add_t(text)
         del self._bfr[:]
+
+
