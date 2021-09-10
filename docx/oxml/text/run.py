@@ -12,8 +12,6 @@ from ..xmlchemy import (
     BaseOxmlElement, OptionalAttribute, ZeroOrMore, ZeroOrOne ,RequiredAttribute
 )
 
-from .. import OxmlElement
-
 
 class CT_Br(BaseOxmlElement):
     """
