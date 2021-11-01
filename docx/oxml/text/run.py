@@ -66,28 +66,35 @@ class CT_R(BaseOxmlElement):
         return drawing
 
     def add_comm(self, author, comment_part, initials, dtime, comment_text):
-
         comment = comment_part.add_comment(author, initials, dtime)
         comment._add_p(comment_text)
         # _r = self.add_r()
-        self.add_comment_reference(comment._id)
         self.link_comment(comment._id)
 
         return comment
 
     def link_comment(self, _id):
-        rStart = OxmlElement('w:commentRangeStart')
-        rStart._id = _id
-        rEnd = OxmlElement('w:commentRangeEnd')
-        rEnd._id = _id
-        self.addprevious(rStart)
-        self.addnext(rEnd)
+        self.mark_comment_start(_id)
+        self.mark_comment_end(_id)
 
-    def add_comment_reference(self, _id):
+    def mark_comment_start(self, _id):
+        comm_start = OxmlElement('w:commentRangeStart')
+        comm_start._id = _id
+        self.addprevious(comm_start)
+
+    def mark_comment_end(self, _id):
+        comm_end = OxmlElement("w:commentRangeEnd")
+        comm_end._id = _id
+        self.addnext(comm_end)
+        ref_run = self.create_comment_reference(_id)
+        comm_end.addnext(ref_run)
+
+    def create_comment_reference(self, _id):
         reference = OxmlElement('w:commentReference')
         reference._id = _id
-        self.append(reference)
-        return reference
+        ref_run_elem = OxmlElement("w:r")
+        ref_run_elem.append(reference)
+        return ref_run_elem
 
     def add_footnote_reference(self, _id):
         rPr = self.get_or_add_rPr()
