@@ -78,23 +78,32 @@ class CT_R(BaseOxmlElement):
         self.mark_comment_end(_id)
 
     def mark_comment_start(self, _id):
+        """Mark run as start of comment with CRS
+
+        <w:commentRangeStart w:id=_id/>
+        <self run element>
+        """
         comm_start = OxmlElement('w:commentRangeStart')
         comm_start._id = _id
         self.addprevious(comm_start)
 
     def mark_comment_end(self, _id):
+        """Mark run as end of a comment with CRE and ref.
+
+        <self run element>
+        <w:commentRangeEnd w:id=_id/>
+        <w:r>
+            <w:commentReference w:id=_id/>
+        </w:r>
+        """
         comm_end = OxmlElement("w:commentRangeEnd")
         comm_end._id = _id
         self.addnext(comm_end)
-        ref_run = self.create_comment_reference(_id)
-        comm_end.addnext(ref_run)
-
-    def create_comment_reference(self, _id):
         reference = OxmlElement('w:commentReference')
         reference._id = _id
         ref_run_elem = OxmlElement("w:r")
         ref_run_elem.append(reference)
-        return ref_run_elem
+        comm_end.addnext(ref_run_elem)
 
     def add_footnote_reference(self, _id):
         rPr = self.get_or_add_rPr()
