@@ -145,6 +145,49 @@ class Document(ElementProxy):
             par.text = " ".join([num+")",
                                  "" if par.text is None else par.text])
 
+    def add_comment(self, start_run, end_run,
+                    author,
+                    dtime,
+                    comment_text,
+                    initials=None):
+        """Add comment spanning over one or more runs.
+
+        Args:
+            start_run: |CT_Run| instance, first run in comment
+            author: (str) Comment author
+            end_run: |CT_Run| instance, last run in comment.
+            dtime: (str) Date and Time of comment, use
+                str(datetime.datetime.now())
+            comment_text: (str) Text body of comment
+            initials: (str) Comment author initials. If None, determined with a
+                heuristic from `author` variable
+        Returns:
+            Comment object
+        """
+        if initials is None:
+            # Upper: use upper-case chars to determine initials
+            # 'BlackBoiler' --> 'BB'
+            # 'Ryan Mannion' --> 'RM'
+            # 'ryan mannion' --> ''
+            def upper(n): return "".join([c for c in n if c.isupper()])
+            # Splitter: split name and use first chars to determine initials
+            # ryan mannion --> RM
+            # ryan --> R
+            def splitter(n): return "".join([t[0] for t in n.split(" ")]).upper()
+
+            initials = upper(author)
+            if initials == '':
+                initials = splitter(author)
+
+        comment_part_element = self.comments_part.element
+        comment = comment_part_element.add_comment(author, initials, dtime)
+        comment._add_p(comment_text)
+        start_run.mark_comment_start(comment._id)
+        end_run.mark_comment_end(comment._id)
+
+        return comment
+
+
     @property
     def core_properties(self):
         """
