@@ -65,7 +65,7 @@ class CT_R(BaseOxmlElement):
         drawing.append(inline_or_anchor)
         return drawing
 
-    def add_comm(self, author, comment_part, initials, dtime, comment_text):
+    def add_comment(self, author, comment_part, initials, dtime, comment_text):
         comment = comment_part.add_comment(author, initials, dtime)
         comment._add_p(comment_text)
         # _r = self.add_r()

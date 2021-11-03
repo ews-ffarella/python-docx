@@ -98,7 +98,8 @@ class Run(Parented):
         comment_part = self.part._comments_part.element
         if dtime is None:
             dtime = str( datetime.now() ).replace(' ', 'T')
-        comment =  self._r.add_comm(author, comment_part, initials, dtime, text)
+        comment =  self._r.add_comment(author, comment_part, initials, dtime,
+                                       text)
 
         return comment
     @property
