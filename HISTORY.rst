@@ -3,6 +3,13 @@
 Release History
 ---------------
 
+0.4 (2021-12-07)
+++++++++++++++++++
+
+- Adds support for reading and inserting comments
+- Commits from user BayooG also add basic support for footnotes
+
+
 0.3 (2021-09-01)
 ++++++++++++++++++
 

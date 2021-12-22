@@ -5,9 +5,11 @@ Custom element classes related to text runs (CT_R).
 """
 
 from ..ns import qn
-from ..simpletypes import ST_BrClear, ST_BrType
+from ..simpletypes import ST_BrClear, ST_BrType, ST_DecimalNumber, ST_String
+
+from .. import OxmlElement
 from ..xmlchemy import (
-    BaseOxmlElement, OptionalAttribute, ZeroOrMore, ZeroOrOne
+    BaseOxmlElement, OptionalAttribute, ZeroOrMore, ZeroOrOne ,RequiredAttribute
 )
 
 
@@ -24,6 +26,8 @@ class CT_R(BaseOxmlElement):
     ``<w:r>`` element, containing the properties and text for a run.
     """
     rPr = ZeroOrOne('w:rPr')
+    ###wrong
+    ref = ZeroOrOne('w:commentRangeStart', successors=('w:r',))
     t = ZeroOrMore('w:t')
     br = ZeroOrMore('w:br')
     cr = ZeroOrMore('w:cr')
@@ -61,6 +65,77 @@ class CT_R(BaseOxmlElement):
         drawing.append(inline_or_anchor)
         return drawing
 
+    def add_comment(self, author, comment_part, initials, dtime, comment_text):
+        comment = comment_part.add_comment(author, initials, dtime)
+        comment._add_p(comment_text)
+        # _r = self.add_r()
+        self.link_comment(comment._id)
+
+        return comment
+
+    def link_comment(self, _id):
+        self.mark_comment_start(_id)
+        self.mark_comment_end(_id)
+
+    def mark_comment_start(self, _id):
+        """Mark run as start of comment with CRS
+
+        <w:commentRangeStart w:id=_id/>
+        <self run element>
+        """
+        comm_start = OxmlElement('w:commentRangeStart')
+        comm_start._id = _id
+        self.addprevious(comm_start)
+
+    def mark_comment_end(self, _id):
+        """Mark run as end of a comment with CRE and ref.
+
+        <self run element>
+        <w:commentRangeEnd w:id=_id/>
+        <w:r>
+            <w:commentReference w:id=_id/>
+        </w:r>
+        """
+        comm_end = OxmlElement("w:commentRangeEnd")
+        comm_end._id = _id
+        self.addnext(comm_end)
+        reference = OxmlElement('w:commentReference')
+        reference._id = _id
+        ref_run_elem = OxmlElement("w:r")
+        ref_run_elem.append(reference)
+        comm_end.addnext(ref_run_elem)
+
+    def add_footnote_reference(self, _id):
+        rPr = self.get_or_add_rPr()
+        rstyle = rPr.get_or_add_rStyle()
+        rstyle.val = 'FootnoteReference'
+        reference = OxmlElement('w:footnoteReference')
+        reference._id = _id
+        self.append(reference)
+        return reference
+
+    def add_footnoteRef(self):
+        ref = OxmlElement('w:footnoteRef')
+        self.append(ref)
+
+        return ref
+
+    def footnote_style(self):
+        rPr = self.get_or_add_rPr()
+        rstyle = rPr.get_or_add_rStyle()
+        rstyle.val = 'FootnoteReference'
+
+        self.add_footnoteRef()
+        return self
+
+    @property
+    def footnote_id(self):
+        _id = self.xpath('./w:footnoteReference/@w:id')
+        if len(_id) > 1 or len(_id) == 0 :
+            return None
+        else:
+            return int(_id[0])
+
     def clear_content(self):
         """
         Remove all child elements except the ``<w:rPr>`` element if present.
@@ -68,6 +143,12 @@ class CT_R(BaseOxmlElement):
         content_child_elms = self[1:] if self.rPr is not None else self[:]
         for child in content_child_elms:
             self.remove(child)
+
+    def add_comment_reference(self, _id):
+        reference = OxmlElement('w:commentReference')
+        reference._id = _id
+        self.append(reference)
+        return reference
 
     def copy_rpr(self,rprCopy):
         rPr = self.get_or_add_rPr()
@@ -82,6 +163,7 @@ class CT_R(BaseOxmlElement):
     @rpr.setter
     def rpr(self, value):
         self. copy_rpr(value)
+
     @property
     def style(self):
         """
@@ -118,6 +200,8 @@ class CT_R(BaseOxmlElement):
                 text += '\t'
             elif child.tag in (qn('w:br'), qn('w:cr')):
                 text += '\n'
+            elif child.tag == qn('w:noBreakHyphen'):
+                text += '-'
         return text
 
     @text.setter
@@ -211,6 +295,13 @@ class _DelRunContentAppender(object):
             self._r.add_dt(text)
         del self._bfr[:]
 
+class CT_RPr(BaseOxmlElement):
+    rStyle  = ZeroOrOne('w:rStyle')
+
+
+class CT_RStyle(BaseOxmlElement):
+    val = RequiredAttribute('w:val',ST_String)
+
 class _RunContentAppender(object):
     """
     Service object that knows how to translate a Python string into run
@@ -265,3 +356,5 @@ class _RunContentAppender(object):
         if text:
             self._r.add_t(text)
         del self._bfr[:]
+
+

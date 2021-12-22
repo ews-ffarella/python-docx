@@ -4,6 +4,8 @@
 
 from __future__ import absolute_import, division, print_function, unicode_literals
 
+from docx.oxml.ns import qn
+
 from docx.blkcntnr import BlockItemContainer
 from docx.enum.section import WD_SECTION
 from docx.enum.text import WD_BREAK
@@ -143,6 +145,49 @@ class Document(ElementProxy):
             par.text = " ".join([num+")",
                                  "" if par.text is None else par.text])
 
+    def add_comment(self, start_run, end_run,
+                    author,
+                    dtime,
+                    comment_text,
+                    initials=None):
+        """Add comment spanning over one or more runs.
+
+        Args:
+            start_run: |CT_Run| instance, first run in comment
+            author: (str) Comment author
+            end_run: |CT_Run| instance, last run in comment.
+            dtime: (str) Date and Time of comment, use
+                str(datetime.datetime.now())
+            comment_text: (str) Text body of comment
+            initials: (str) Comment author initials. If None, determined with a
+                heuristic from `author` variable
+        Returns:
+            Comment object
+        """
+        if initials is None:
+            # Upper: use upper-case chars to determine initials
+            # 'BlackBoiler' --> 'BB'
+            # 'Ryan Mannion' --> 'RM'
+            # 'ryan mannion' --> ''
+            def upper(n): return "".join([c for c in n if c.isupper()])
+            # Splitter: split name and use first chars to determine initials
+            # ryan mannion --> RM
+            # ryan --> R
+            def splitter(n): return "".join([t[0] for t in n.split(" ")]).upper()
+
+            initials = upper(author)
+            if initials == '':
+                initials = splitter(author)
+
+        comment_part_element = self.comments_part.element
+        comment = comment_part_element.add_comment(author, initials, dtime)
+        comment._add_p(comment_text)
+        start_run.mark_comment_start(comment._id)
+        end_run.mark_comment_end(comment._id)
+
+        return comment
+
+
     @property
     def core_properties(self):
         """
@@ -150,6 +195,23 @@ class Document(ElementProxy):
         properties of this document.
         """
         return self._part.core_properties
+
+    @property
+    def comments_part(self):
+        """
+        A |Comments| object providing read/write access to the core
+        properties of this document.
+        """
+        return self.part.comments_part
+    
+    # @property
+    # def footnotes_part(self):
+    #     """
+    #     A |Footnotes| object providing read/write access to the core
+    #     properties of this document.
+    #     """
+    #     return self.part._footnotes_part
+
 
     @property
     def inline_shapes(self):
@@ -215,6 +277,23 @@ class Document(ElementProxy):
         """
         return self._body.tables
 
+    @property
+    def elements(self):
+        return self._body.elements
+    
+    @property
+    def abstractNumIds(self):
+        """
+        Returns list of all the 'w:abstarctNumId' of this document
+        """
+        return self._body.abstractNumIds
+    
+    @property
+    def last_abs_num(self):
+        last = self.abstractNumIds[-1]
+        val = last.attrib.get(qn('w:abstractNumId'))
+        return  last, val
+    
     @property
     def _block_width(self):
         """
