@@ -183,7 +183,7 @@ class Run(Parented):
         """
         return self._r.text
 
-    @text.setter
+    @deltext.setter
     def deltext(self, text):
         self._r.deltext = text
 
