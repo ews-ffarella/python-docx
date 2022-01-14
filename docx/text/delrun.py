@@ -19,9 +19,10 @@ class Del(Parented):
     A delRun object
     """
     def __init__(self, d, parent):
-        super(Del,self).__init__(parent)
+        super(Del, self).__init__(parent)
         self._d = self._element = self.element = d
-    def add_run(self,text,style):
+
+    def add_run(self, text, style):
         """
         Append a run to this paragraph containing *text* and having character
         style identified by style ID *style*. *text* can contain tab
@@ -37,21 +38,28 @@ class Del(Parented):
         if style:
             run.style = style
         return run
-    def add_text(self,text):
+
+    def add_text(self, text):
 
         t = self._d.add_dt(text)
         return _Text(t)
 
-    def text(self,text):
+    def text(self, text):
         self._d.text = text
 
     @property
     def rpr(self):
         return self._d.r_lst[0].rpr
+
     @rpr.setter
-    def rpr(self,value):
+    def rpr(self, value):
         for r in self._d.r_lst:
-            r.rpr=value
+            r.rpr = value
+
+    @property
+    def all_runs(self):
+        return [Run(r, self) for r in self._d.xpath('.//w:r[not(ancestor::w:r)]')]
+
 
 class _Text(object):
     """

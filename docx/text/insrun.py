@@ -16,12 +16,13 @@ from .run import Run
 
 class Ins(Parented):
     """
-    A delRun object
+    An insRun object
     """
     def __init__(self, i, parent):
-        super(Ins,self).__init__(parent)
+        super(Ins, self).__init__(parent)
         self._i = self._element = self.element = i
-    def add_run(self,text,style):
+
+    def add_run(self, text, style):
         """
         Append a run to this paragraph containing *text* and having character
         style identified by style ID *style*. *text* can contain tab
@@ -37,20 +38,26 @@ class Ins(Parented):
         if style:
             run.style = style
         return run
-    def add_text(self,text):
 
+    def add_text(self, text):
         t = self._i.add_t(text)
         return _Text(t)
 
-    def text(self,text):
+    def text(self, text):
         self._i.text = text
+
     @property
     def rpr(self):
         return self._i.r_lst[0].rpr
+
     @rpr.setter
-    def rpr(self,value):
+    def rpr(self, value):
         for r in self._i.r_lst:
-            r.rpr=value
+            r.rpr = value
+
+    @property
+    def all_runs(self):
+        return [Run(r, self) for r in self._i.xpath('.//w:r[not(ancestor::w:r)]')]
 
 class _Text(object):
     """
