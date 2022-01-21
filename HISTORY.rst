@@ -3,6 +3,11 @@
 Release History
 ---------------
 
+0.4.1-rc.1 (2022-01-21)
+++++++++++++++++++
+- Adds ability to get all runs from Ins and Del objects
+    +  Allows us to get comments that affect runs inside Ins and Del
+
 0.4 (2021-12-07)
 ++++++++++++++++++
 
