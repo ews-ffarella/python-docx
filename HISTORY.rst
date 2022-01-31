@@ -3,6 +3,14 @@
 Release History
 ---------------
 
+0.4.1 (2022-01-31)
+++++++++++++++++++
+DEV-1405: Comments in edit transfer
+- Adds all_runs property to Ins and Del objects
+    +  Allows us to get comments that affect runs inside Ins and Del
+- changes `comments` property of Paragraph to use all_runs instead of runs
+    + allows us to get comments from Ins and Del runs
+
 0.4.1-rc.1 (2022-01-21)
 ++++++++++++++++++
 - Adds ability to get all runs from Ins and Del objects
