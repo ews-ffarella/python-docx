@@ -166,6 +166,7 @@ class Paragraph(Parented):
         Sequence of |Del| instances corresponding to the <w:del> elements in this paragraph
         """
         return [Del(d, self) for d in self._p.d_lst]
+
     @property
     def runs(self):
         """
@@ -177,6 +178,7 @@ class Paragraph(Parented):
     @property
     def all_runs(self):
         return [Run(r, self) for r in self._p.xpath('.//w:r[not(ancestor::w:r)]')]
+
     @property
     def style(self):
         """
@@ -270,14 +272,14 @@ class Paragraph(Parented):
     
     @property
     def footnotes(self):
-        if self._p.footnote_ids is not None :
+        if self._p.footnote_ids is not None:
             return True
-        else :
+        else:
             return False
 
     @property
     def comments(self):
-        runs_comments = [run.comments for run in self.runs]
+        runs_comments = [run.comments for run in self.all_runs]
         return [comment for comments in runs_comments for comment in comments]
 
     @text.setter
