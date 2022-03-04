@@ -36,20 +36,11 @@ class CT_DocDefaults(BaseOxmlElement):
     rPrDefault = ZeroOrOne('w:rPrDefault', successors=(_tag_seq[1:]))
     pPrDefault = ZeroOrOne('w:pPrDefault', successors=())
 
-    @property
-    def rpr(self):
-        rpr_default = self.rPrDefault
-        if rpr_default is None:
-            return None
-        return self.rPrDefault.rPr
-
-
 class CT_RPrDefault(BaseOxmlElement):
     rPr = ZeroOrOne('w:rPr', successors=())
 
 class CT_PPrDefault(BaseOxmlElement):
     pPr = ZeroOrOne('w:pPr', successors=())
-
 
 class CT_LatentStyles(BaseOxmlElement):
     """
@@ -152,10 +143,6 @@ class CT_Style(BaseOxmlElement):
     styleId = OptionalAttribute('w:styleId', ST_String)
     default = OptionalAttribute('w:default', ST_OnOff)
     customStyle = OptionalAttribute('w:customStyle', ST_OnOff)
-
-    @property
-    def rpr(self):
-        return self.rPr
 
     @property
     def basedOn_val(self):
