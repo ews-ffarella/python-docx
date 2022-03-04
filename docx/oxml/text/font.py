@@ -337,6 +337,14 @@ class CT_RPr(BaseOxmlElement):
         else:
             return i.val
 
+    @property
+    def caps_val(self):
+        caps = self.caps
+        if caps is None:
+            return None
+        else:
+            return caps.val
+
 
 class CT_Underline(BaseOxmlElement):
     """
