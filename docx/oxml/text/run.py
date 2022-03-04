@@ -38,7 +38,6 @@ class CT_R(BaseOxmlElement):
     def _insert_rPr(self, rPr):
         self.insert(0, rPr)
         return rPr
-
     def add_dt(self, text):
         """
         Return a newly added ``<w:delText>`` element containing *text*.
