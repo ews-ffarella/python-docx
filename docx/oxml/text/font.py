@@ -321,6 +321,27 @@ class CT_RPr(BaseOxmlElement):
         element = getattr(self, 'get_or_add_%s' % name)()
         element.val = value
 
+    @property
+    def b_val(self):
+        b = self.b
+        if b is None:
+            return None
+        return b.val
+
+    @property
+    def i_val(self):
+        i = self.i
+        if i is None:
+            return None
+        return i.val
+
+    @property
+    def caps_val(self):
+        caps = self.caps
+        if caps is None:
+            return None
+        return caps.val
+
 
 class CT_Underline(BaseOxmlElement):
     """
