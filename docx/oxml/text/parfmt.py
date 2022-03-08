@@ -310,6 +310,10 @@ class CT_PPr(BaseOxmlElement):
         else:
             self.get_or_add_widowControl().val = value
 
+    @property
+    def sectpr(self):
+        return self.sectPr
+
 
 class CT_Spacing(BaseOxmlElement):
     """
