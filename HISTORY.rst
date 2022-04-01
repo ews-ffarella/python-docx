@@ -2,6 +2,10 @@
 
 Release History
 ---------------
+0.4.2-rc.1 (2022-04-01)
+++++++++++++++++++
+- Adds attributes to access more information about formatting
+
 
 0.4.1 (2022-01-31)
 ++++++++++++++++++
