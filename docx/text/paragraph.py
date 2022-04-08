@@ -24,7 +24,7 @@ class Paragraph(Parented):
     """
     def __init__(self, p, parent):
         super(Paragraph, self).__init__(parent)
-        self._p = self._element = p
+        self._p = self._element = self.element = p
 
     def add_ins(self, text=None, style=None):
         i = self._p.add_i()
