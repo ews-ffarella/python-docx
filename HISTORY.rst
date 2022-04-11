@@ -2,6 +2,10 @@
 
 Release History
 ---------------
+0.4.3 ( )
+++++++++++++++++++
+-
+
 0.4.2 (2022-04-11)
 ++++++++++++++++++
 - Adds attributes to access more information about formatting
