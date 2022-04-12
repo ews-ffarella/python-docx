@@ -38,6 +38,7 @@ class CT_R(BaseOxmlElement):
     def _insert_rPr(self, rPr):
         self.insert(0, rPr)
         return rPr
+
     def add_dt(self, text):
         """
         Return a newly added ``<w:delText>`` element containing *text*.
@@ -231,6 +232,14 @@ class CT_R(BaseOxmlElement):
     def deltext(self, text):
         self.clear_content()
         _DelRunContentAppender.append_to_run_from_text(self, text)
+
+    @property
+    def br(self):
+        br = self.xpath("./w:br")
+        if len(br) == 0:
+            return None
+        return br
+
 
 class CT_Text(BaseOxmlElement):
     """

@@ -62,6 +62,10 @@ class CT_PPr(BaseOxmlElement):
     del _tag_seq
 
     @property
+    def rpr(self):
+        return self.rPr
+
+    @property
     def first_line_indent(self):
         """
         A |Length| value calculated from the values of `w:ind/@w:firstLine`
@@ -305,6 +309,10 @@ class CT_PPr(BaseOxmlElement):
             self._remove_widowControl()
         else:
             self.get_or_add_widowControl().val = value
+
+    @property
+    def sectpr(self):
+        return self.sectPr
 
 
 class CT_Spacing(BaseOxmlElement):
