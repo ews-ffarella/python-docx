@@ -2,7 +2,7 @@
 
 Release History
 ---------------
-0.4.3 ( )
+0.4.3 (2022-05-13)
 ++++++++++++++++++
 - DEV-1907: remove self-added `br` property from CT_R
     + having it there seemed to remove methods added by ZeroOrMore()
