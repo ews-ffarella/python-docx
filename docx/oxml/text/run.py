@@ -233,13 +233,6 @@ class CT_R(BaseOxmlElement):
         self.clear_content()
         _DelRunContentAppender.append_to_run_from_text(self, text)
 
-    @property
-    def br(self):
-        br = self.xpath("./w:br")
-        if len(br) == 0:
-            return None
-        return br
-
 
 class CT_Text(BaseOxmlElement):
     """
