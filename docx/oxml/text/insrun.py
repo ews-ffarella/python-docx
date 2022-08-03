@@ -20,6 +20,7 @@ class CT_IR(BaseOxmlElement):
     ``<w:ins>`` element, containing the properties and text for a insert run.
     """
     r = ZeroOrMore('w:r')
+
     def add_t(self,text):
         """
         Return a newly added ''<w:t>'' element containing *text*.
@@ -39,13 +40,8 @@ class CT_IR(BaseOxmlElement):
         """
         text = ''
         for child in self:
-            if child.tag == qn('w:t'):
-                t_text = child.text
-                text += t_text if t_text is not None else ''
-            elif child.tag == qn('w:tab'):
-                text += '\t'
-            elif child.tag in (qn('w:br'), qn('w:cr')):
-                text += '\n'
+            if child.tag == qn('w:r'):
+                text += child.text
         return text
 
     @text.setter
@@ -65,6 +61,7 @@ class CT_IR(BaseOxmlElement):
     @rpr.setter
     def rpr(self, value):
         self.copy_rpr(value)
+
     @property
     def style(self):
         """
