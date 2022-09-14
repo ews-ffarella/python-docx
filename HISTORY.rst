@@ -2,6 +2,10 @@
 
 Release History
 ---------------
+0.4.5 ()
+++++++++++++++++++
+
+
 0.4.4 ()
 ++++++++++++++++++
 - DEV-1807: fix `text` property of CT_IR and CT_DR
