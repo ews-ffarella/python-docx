@@ -2,6 +2,10 @@
 
 Release History
 ---------------
+0.4.4 (2022-09-14)
+++++++++++++++++++
+- DEV-1807: fix `text` property of CT_IR and CT_DR
+
 0.4.3 (2022-05-13)
 ++++++++++++++++++
 - DEV-1907: remove self-added `br` property from CT_R

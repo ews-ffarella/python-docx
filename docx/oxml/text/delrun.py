@@ -14,12 +14,14 @@ from ..ns import qn
 from ..simpletypes import ST_BrClear, ST_BrType
 from ..xmlchemy import (BaseOxmlElement, OptionalAttribute, ZeroOrMore, ZeroOrOne)
 
+
 class CT_DR(BaseOxmlElement):
     """
     ``<w:del>`` element, containing the properties and text for a delete run.
     """
     r = ZeroOrMore('w:r')
-    def add_dt(self,text):
+
+    def add_dt(self, text):
         """
         Return a newly added ''<w:delText>'' element containing *text*.
         """
@@ -37,13 +39,8 @@ class CT_DR(BaseOxmlElement):
         """
         text = ''
         for child in self:
-            if child.tag == qn('w:delText'):
-                t_text = child.text
-                text += t_text if t_text is not None else ''
-            elif child.tag == qn('w:tab'):
-                text += '\t'
-            elif child.tag in (qn('w:br'), qn('w:cr')):
-                text += '\n'
+            if child.tag == qn("w:r"):
+                text += child.text
         return text
 
     @text.setter
