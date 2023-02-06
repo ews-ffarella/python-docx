@@ -2,6 +2,11 @@
 
 Release History
 ---------------
+
+0.4.6 ()
+++++++++++++++++++
+
+
 0.4.5 (2023-02-06)
 ++++++++++++++++++
 - DEV-2853: fix `all_runs` methods of Ins and Del objects
