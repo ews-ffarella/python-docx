@@ -4,6 +4,7 @@ Release History
 ---------------
 0.4.5 ()
 ++++++++++++++++++
+- DEV-2853: fix `all_runs` methods of Ins and Del objects
 
 
 0.4.4 (2022-09-14)

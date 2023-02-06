@@ -57,7 +57,8 @@ class Ins(Parented):
 
     @property
     def all_runs(self):
-        return [Run(r, self) for r in self._i.xpath('.//w:r[not(ancestor::w:r)]')]
+        return [Run(r, self) for r in self._i.xpath('./w:r')]
+
 
 class _Text(object):
     """
