@@ -12,7 +12,7 @@ Custom element classes related to delete runs (CT_DR).
 
 from ..ns import qn
 from ..simpletypes import ST_BrClear, ST_BrType
-from ..xmlchemy import (BaseOxmlElement, OptionalAttribute, ZeroOrMore, ZeroOrOne)
+from ..xmlchemy import (BaseOxmlElement, OptionalAttribute, ZeroOrMore, ZeroOrOne, OxmlElement)
 
 
 class CT_DR(BaseOxmlElement):
@@ -46,14 +46,16 @@ class CT_DR(BaseOxmlElement):
     @text.setter
     def text(self, text):
         self.clear_content()
-        _RunContentAppender.append_to_run_from_text(self, text)
+        new_run = OxmlElement("w:r")
+        new_run.add_dt(text)
+        self.append(new_run)
 
     def clear_content(self):
         """
         Remove all child elements except the ``<w:rPr>`` element if present.
         """
-        content_child_elms = self[1:] if self.rPr is not None else self[:]
-        for child in content_child_elms:
+        # content_child_elms = self[1:] if self.rPr is not None else self[:]
+        for child in self[:]:
             self.remove(child)
 
     def copy_rpr(self,rprCopy):
