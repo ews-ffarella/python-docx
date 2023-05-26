@@ -3,7 +3,11 @@
 Release History
 ---------------
 
-0.4.6 ()
+0.4.7 ()
+++++++++++++++++++
+
+
+0.4.6 (2023-05-26)
 ++++++++++++++++++
 - DEV-3195: wrap int() call in float() so we can read float vals of size attrs
     in e.g. w:spacing tags
