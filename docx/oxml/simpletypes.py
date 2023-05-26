@@ -215,7 +215,7 @@ class ST_Coordinate(BaseIntType):
     def convert_from_xml(cls, str_value):
         if 'i' in str_value or 'm' in str_value or 'p' in str_value:
             return ST_UniversalMeasure.convert_from_xml(str_value)
-        return Emu(int(str_value))
+        return Emu(int(round(float(str_value))))
 
     @classmethod
     def validate(cls, value):
@@ -280,7 +280,7 @@ class ST_HpsMeasure(XsdUnsignedLong):
     def convert_from_xml(cls, str_value):
         if 'm' in str_value or 'n' in str_value or 'p' in str_value:
             return ST_UniversalMeasure.convert_from_xml(str_value)
-        return Pt(int(str_value)/2.0)
+        return Pt(int(round(float(str_value)))/2.0)
 
     @classmethod
     def convert_to_xml(cls, value):
@@ -315,7 +315,7 @@ class ST_PositiveCoordinate(XsdLong):
 
     @classmethod
     def convert_from_xml(cls, str_value):
-        return Emu(int(str_value))
+        return Emu(int(round(float(str_value))))
 
     @classmethod
     def validate(cls, value):
@@ -332,7 +332,7 @@ class ST_SignedTwipsMeasure(XsdInt):
     def convert_from_xml(cls, str_value):
         if 'i' in str_value or 'm' in str_value or 'p' in str_value:
             return ST_UniversalMeasure.convert_from_xml(str_value)
-        return Twips(int(str_value))
+        return Twips(int(round(float(str_value))))
 
     @classmethod
     def convert_to_xml(cls, value):
@@ -375,7 +375,7 @@ class ST_TwipsMeasure(XsdUnsignedLong):
     def convert_from_xml(cls, str_value):
         if 'i' in str_value or 'm' in str_value or 'p' in str_value:
             return ST_UniversalMeasure.convert_from_xml(str_value)
-        return Twips(int(str_value))
+        return Twips(int(round(float(str_value))))
 
     @classmethod
     def convert_to_xml(cls, value):
