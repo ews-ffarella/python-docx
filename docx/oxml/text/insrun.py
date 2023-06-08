@@ -12,7 +12,7 @@ We want to construct these
 
 from ..ns import qn
 from ..simpletypes import ST_BrClear, ST_BrType
-from ..xmlchemy import (BaseOxmlElement, OptionalAttribute, ZeroOrMore, ZeroOrOne)
+from ..xmlchemy import (BaseOxmlElement, OptionalAttribute, ZeroOrMore, ZeroOrOne, OxmlElement)
 
 
 class CT_IR(BaseOxmlElement):
@@ -47,7 +47,9 @@ class CT_IR(BaseOxmlElement):
     @text.setter
     def text(self, text):
         self.clear_content()
-        _RunContentAppender.append_to_run_from_text(self, text)
+        new_run = OxmlElement("w:r")
+        new_run.text = text
+        self.append(new_run)
 
     def copy_rpr(self,rprCopy):
         rPr = self._r.get_or_add_rPr()
@@ -86,8 +88,8 @@ class CT_IR(BaseOxmlElement):
         """
         Remove all child elements except the ``<w:rPr>`` element if present.
         """
-        content_child_elms = self[1:] if self.rPr is not None else self[:]
-        for child in content_child_elms:
+        # content_child_elms = self[1:] if self.rPr is not None else self[:]
+        for child in self[:]:
             self.remove(child)
 
 
