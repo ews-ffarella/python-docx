@@ -3,9 +3,12 @@
 Release History
 ---------------
 
-0.4.7 ()
+0.4.7 (2023-07-19)
 ++++++++++++++++++
-
+- DEV-2649: add shd tag to TcPr for colored table cells
+- Fix "text" attr setter for CT_DR and CT_IR
+- DEV-3177: get children anywhere for all_runs for CT_IR to support runs
+    nested inside of deletes
 
 0.4.6 (2023-05-26)
 ++++++++++++++++++
