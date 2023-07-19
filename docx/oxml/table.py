@@ -805,6 +805,7 @@ class CT_TcPr(BaseOxmlElement):
     gridSpan = ZeroOrOne('w:gridSpan', successors=_tag_seq[3:])
     tcBorders = ZeroOrOne('w:tcBorders', successors = ('w:tcPr',))
     vMerge = ZeroOrOne('w:vMerge', successors=_tag_seq[5:])
+    shd = ZeroOrOne('w:shd', successors=_tag_seq[7:])
     vAlign = ZeroOrOne('w:vAlign', successors=_tag_seq[12:])
     
     del _tag_seq
