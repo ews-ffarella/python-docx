@@ -1,24 +1,20 @@
-# encoding: utf-8
+"""Unit test suite for docx.image.gif module."""
 
-"""Unit test suite for docx.image.gif module"""
-
-from __future__ import absolute_import, print_function
+import io
 
 import pytest
 
-from docx.compat import BytesIO
 from docx.image.constants import MIME_TYPE
 from docx.image.gif import Gif
 
 from ..unitutil.mock import ANY, initializer_mock
 
 
-class DescribeGif(object):
-
+class DescribeGif:
     def it_can_construct_from_a_gif_stream(self, Gif__init__):
         cx, cy = 42, 24
-        bytes_ = b'filler\x2A\x00\x18\x00'
-        stream = BytesIO(bytes_)
+        bytes_ = b"filler\x2A\x00\x18\x00"
+        stream = io.BytesIO(bytes_)
 
         gif = Gif.from_stream(stream)
 
@@ -31,7 +27,7 @@ class DescribeGif(object):
 
     def it_knows_its_default_ext(self):
         gif = Gif(None, None, None, None)
-        assert gif.default_ext == 'gif'
+        assert gif.default_ext == "gif"
 
     # fixture components ---------------------------------------------
 
