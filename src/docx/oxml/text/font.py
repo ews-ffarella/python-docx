@@ -227,6 +227,44 @@ class CT_RPr(BaseOxmlElement):
         rFonts.hAnsi = value
 
     @property
+    def rFonts_asciiTheme(self):
+        """
+        The value of `w:rFonts/@w:asciiTheme` or |None| if not present. Represents
+        the assigned typeface Theme. The rFonts element also specifies other
+        special-case typeface Theme; this method handles the case where just
+        the common Theme is required.
+        """
+        rFonts = self.rFonts
+        if rFonts is None:
+            return None
+        return rFonts.asciiTheme
+
+    @rFonts_asciiTheme.setter
+    def rFonts_asciiTheme(self, value):
+        if value is None:
+            self._remove_rFonts()
+            return
+        rFonts = self.get_or_add_rFonts()
+        rFonts.asciiTheme = value
+
+    @property
+    def rFonts_hAnsiTheme(self):
+        """
+        The value of `w:rFonts/@w:hAnsiTheme` or |None| if not present.
+        """
+        rFonts = self.rFonts
+        if rFonts is None:
+            return None
+        return rFonts.hAnsiTheme
+
+    @rFonts_hAnsiTheme.setter
+    def rFonts_hAnsiTheme(self, value):
+        if value is None and self.rFonts is None:
+            return
+        rFonts = self.get_or_add_rFonts()
+        rFonts.hAnsiTheme = value
+
+    @property
     def style(self) -> str | None:
         """String in `./w:rStyle/@val`, or None if `w:rStyle` is not present."""
         rStyle = self.rStyle
@@ -348,6 +386,27 @@ class CT_RPr(BaseOxmlElement):
             return
         element = getattr(self, "get_or_add_%s" % name)()
         element.val = value
+
+    @property
+    def b_val(self):
+        b = self.b
+        if b is None:
+            return None
+        return b.val
+
+    @property
+    def i_val(self):
+        i = self.i
+        if i is None:
+            return None
+        return i.val
+
+    @property
+    def caps_val(self):
+        caps = self.caps
+        if caps is None:
+            return None
+        return caps.val
 
 
 class CT_Underline(BaseOxmlElement):
