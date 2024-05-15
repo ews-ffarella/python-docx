@@ -3,12 +3,12 @@ Custom element classes related to the footnotes part
 """
 
 
-from . import OxmlElement
-from .simpletypes import ST_DecimalNumber, ST_String
-from ..text.paragraph import Paragraph
-from ..text.run import Run
-from ..opc.constants import NAMESPACE
-from .xmlchemy import (
+from docx.oxml.parser import OxmlElement
+from docx.oxml.simpletypes import ST_DecimalNumber, ST_String
+from docx.text.paragraph import Paragraph
+from docx.text.run import Run
+from docx.opc.constants import NAMESPACE
+from docx.oxml.xmlchemy import (
     BaseOxmlElement, OneAndOnlyOne, RequiredAttribute, ZeroOrMore, ZeroOrOne
 )
 

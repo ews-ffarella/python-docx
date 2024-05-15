@@ -2,12 +2,12 @@
 Custom element classes related to the comments part
 """
 
-from . import OxmlElement
-from .simpletypes import ST_DecimalNumber, ST_String
-from ..opc.constants import NAMESPACE
-from ..text.paragraph import Paragraph
-from ..text.run import Run
-from .xmlchemy import (
+from docx.oxml.parser import OxmlElement
+from docx.oxml.simpletypes import ST_DecimalNumber, ST_String
+from docx.opc.constants import NAMESPACE
+from docx.text.paragraph import Paragraph
+from docx.text.run import Run
+from docx.oxml.xmlchemy import (
 	BaseOxmlElement, OneAndOnlyOne, RequiredAttribute, ZeroOrMore, ZeroOrOne
 )
 

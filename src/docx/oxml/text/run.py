@@ -8,7 +8,7 @@ from docx.oxml.drawing import CT_Drawing
 from docx.oxml.ns import qn
 from docx.oxml.simpletypes import ST_BrClear, ST_BrType
 from docx.oxml.text.font import CT_RPr
-from docx.oxml import OxmlElement
+from docx.oxml.parser import OxmlElement
 from docx.oxml.xmlchemy import BaseOxmlElement, OptionalAttribute, ZeroOrMore, ZeroOrOne
 from docx.shared import TextAccumulator
 

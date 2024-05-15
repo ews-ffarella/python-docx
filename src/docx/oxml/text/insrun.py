@@ -1,18 +1,8 @@
-"""
-We want to construct these
- <w:ins w:id="0" w:author="Jonathan Herr" w:date="2017-07-23T17:10:09Z" oouserid="638b80f8-8add-48ff-8ca8-d0c2d566e795">
-            <w:r>
-                <w:rPr>
-                    <w:szCs w:val="24"/>
-                </w:rPr>
-                <w:t xml:space="preserve">This is a new sentence.</w:t>
-            </w:r>
-			</w:ins >
-"""
-
-from ..ns import qn
-from ..simpletypes import ST_BrClear, ST_BrType
-from ..xmlchemy import (BaseOxmlElement, OptionalAttribute, ZeroOrMore, ZeroOrOne, OxmlElement)
+from docx.oxml.ns import qn
+from docx.oxml.parser import OxmlElement
+from docx.oxml.xmlchemy import (
+    BaseOxmlElement, OptionalAttribute, ZeroOrMore, ZeroOrOne
+)
 
 
 class CT_IR(BaseOxmlElement):

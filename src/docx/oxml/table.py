@@ -8,8 +8,7 @@ from docx.enum.table import WD_CELL_VERTICAL_ALIGNMENT, WD_ROW_HEIGHT_RULE
 from docx.exceptions import InvalidSpanError
 from docx.oxml.ns import nsdecls, qn, nsmap
 from docx.oxml.parser import parse_xml
-from docx.oxml.xmlchemy import OxmlElement
-from docx.shared import Emu, Twips
+from docx.oxml.parser import OxmlElement
 from docx.oxml.simpletypes import (
     ST_Merge,
     ST_TblLayoutType,

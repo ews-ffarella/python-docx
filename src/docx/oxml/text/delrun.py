@@ -10,9 +10,10 @@ Custom element classes related to delete runs (CT_DR).
 </w:del>
 """
 
-from ..ns import qn
-from ..simpletypes import ST_BrClear, ST_BrType
-from ..xmlchemy import (BaseOxmlElement, OptionalAttribute, ZeroOrMore, ZeroOrOne, OxmlElement)
+from docx.oxml.ns import qn
+from docx.oxml.simpletypes import ST_BrClear, ST_BrType
+from docx.oxml.parser import OxmlElement
+from docx.oxml.xmlchemy import (BaseOxmlElement, OptionalAttribute, ZeroOrMore, ZeroOrOne)
 
 
 class CT_DR(BaseOxmlElement):
