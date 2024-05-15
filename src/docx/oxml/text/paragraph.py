@@ -22,6 +22,8 @@ class CT_P(BaseOxmlElement):
     """`<w:p>` element, containing the properties and text for a paragraph."""
 
     add_r: Callable[[], CT_R]
+    add_d: Callable[[], CT_R]
+    add_i: Callable[[], CT_R]
     get_or_add_pPr: Callable[[], CT_PPr]
     hyperlink_lst: List[CT_Hyperlink]
     r_lst: List[CT_R]
@@ -29,6 +31,8 @@ class CT_P(BaseOxmlElement):
     pPr: CT_PPr | None = ZeroOrOne("w:pPr")  # pyright: ignore[reportGeneralTypeIssues]
     hyperlink = ZeroOrMore("w:hyperlink")
     r = ZeroOrMore("w:r")
+    d = ZeroOrMore("w:del")
+    i = ZeroOrMore("w:ins")
 
     def add_p_before(self) -> CT_P:
         """Return a new `<w:p>` element inserted directly prior to this one."""

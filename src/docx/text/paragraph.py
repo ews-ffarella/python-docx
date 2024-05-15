@@ -31,7 +31,7 @@ class Paragraph(StoryChild):
 
     def __init__(self, p: CT_P, parent: t.ProvidesStoryPart):
         super(Paragraph, self).__init__(parent)
-        self._p = self._element = p
+        self._p = self._element = self.element = p
 
     def add_run(
         self, text: str | None = None, style: str | CharacterStyle | None = None

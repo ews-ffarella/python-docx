@@ -6,16 +6,12 @@ Run-related proxy objects for python-docx, Run in particular.
 
 from __future__ import absolute_import, print_function, unicode_literals
 
-from ..enum.style import WD_STYLE_TYPE
-from ..enum.text import WD_BREAK
-from .font import Font
-from ..shape import InlineShape
-from ..shared import Parented
-from .run import Run
+from docx.text.run import Run
 from docx.styles.style import CharacterStyle
+from docx.shared import StoryChild
 
 
-class Ins(Parented):
+class Ins(StoryChild):
     """
     An insRun object
     """
@@ -29,15 +25,15 @@ class Ins(Parented):
             style: str | CharacterStyle | None = None
     ) -> Run:
         """
-        Append a run to this paragraph containing *text* and having character
-        style identified by style ID *style*. *text* can contain tab
-        (``\\t``) characters, which are converted to the appropriate XML form
-        for a tab. *text* can also include newline (``\\n``) or carriage
-        return (``\\r``) characters, each of which is converted to a line
+        Append a run to this w:ins containing `text` and having character
+        style identified by style ID `style`. `text` can contain tab
+        (`\\t`) characters, which are converted to the appropriate XML form
+        for a tab. `text` can also include newline (`\\n`) or carriage
+        return (`\\r`) characters, each of which is converted to a line
         break.
         """
-        self.r = self._p.add_r()
-        run = Run(self.r, self)
+        r = self._i.add_r()
+        run = Run(r, self)
         if text:
             run.text = text
         if style:
