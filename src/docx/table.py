@@ -8,6 +8,7 @@ from docx.blkcntnr import BlockItemContainer
 from docx.enum.style import WD_STYLE_TYPE
 from docx.oxml.simpletypes import ST_Merge
 from docx.shared import Inches, Parented, lazyproperty
+from docx.section import Section
 
 if TYPE_CHECKING:
     from docx import types as t
@@ -42,6 +43,10 @@ class Table(Parented):
             tc = tr.add_tc()
             tc.width = gridCol.w
         return _Row(tr, self)
+
+    @property
+    def section(self):
+        return Section(self._element._section, self.part)
 
     @property
     def alignment(self) -> WD_TABLE_ALIGNMENT | None:
