@@ -12,6 +12,7 @@ from .font import Font
 from ..shape import InlineShape
 from ..shared import Parented
 from .run import Run
+from docx.styles.style import CharacterStyle
 
 
 class Ins(Parented):
@@ -22,7 +23,11 @@ class Ins(Parented):
         super(Ins, self).__init__(parent)
         self._i = self._element = self.element = i
 
-    def add_run(self, text, style):
+    def add_run(
+            self,
+            text: str | None,
+            style: str | CharacterStyle | None = None
+    ) -> Run:
         """
         Append a run to this paragraph containing *text* and having character
         style identified by style ID *style*. *text* can contain tab
