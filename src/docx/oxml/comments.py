@@ -11,6 +11,7 @@ from .xmlchemy import (
 	BaseOxmlElement, OneAndOnlyOne, RequiredAttribute, ZeroOrMore, ZeroOrOne
 )
 
+
 class CT_Com(BaseOxmlElement):
 	"""
 	A ``<w:comment>`` element, a container for Comment properties 
@@ -98,12 +99,12 @@ class CT_CRS(BaseOxmlElement):
 
 		return commentRangeStart
 
+
 class CT_CRE(BaseOxmlElement):
 	"""
 	A ``w:commentRangeEnd`` element
 	"""
 	_id = RequiredAttribute('w:id', ST_DecimalNumber)
-
 
 	@classmethod
 	def new(cls, _id):
@@ -119,7 +120,7 @@ class CT_CRef(BaseOxmlElement):
 	_id = RequiredAttribute('w:id', ST_DecimalNumber)
 
 	@classmethod
-	def new (cls, _id):
+	def new(cls, _id):
 		commentReference = OxmlElement('w:commentReference')
 		commentReference._id =_id
 		return commentReference
