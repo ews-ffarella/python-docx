@@ -29,6 +29,40 @@ def styleId_from_name(name):
         "heading 9": "Heading9",
     }.get(name, name.replace(" ", ""))
 
+class CT_DocDefaults(BaseOxmlElement):
+    _tag_seq = ('w:rPrDefault', 'w:pPrDefault')
+    rPrDefault = ZeroOrOne('w:rPrDefault', successors=(_tag_seq[1:]))
+    pPrDefault = ZeroOrOne('w:pPrDefault', successors=())
+
+    @property
+    def rpr(self):
+        rpr_default = self.rPrDefault
+        if rpr_default is None:
+            return None
+        return rpr_default.rpr
+
+    @property
+    def ppr(self):
+        ppr_default = self.pPrDefault
+        if ppr_default is None:
+            return None
+        return ppr_default.ppr
+
+
+class CT_RPrDefault(BaseOxmlElement):
+    rPr = ZeroOrOne('w:rPr', successors=())
+
+    @property
+    def rpr(self):
+        return self.rPr
+
+class CT_PPrDefault(BaseOxmlElement):
+    pPr = ZeroOrOne('w:pPr', successors=())
+
+    @property
+    def ppr(self):
+        return self.pPr
+
 
 class CT_LatentStyles(BaseOxmlElement):
     """`w:latentStyles` element, defining behavior defaults for latent styles and
@@ -138,6 +172,14 @@ class CT_Style(BaseOxmlElement):
     )
     default = OptionalAttribute("w:default", ST_OnOff)
     customStyle = OptionalAttribute("w:customStyle", ST_OnOff)
+
+    @property
+    def rpr(self):
+        return self.rPr
+
+    @property
+    def ppr(self):
+        return self.pPr
 
     @property
     def basedOn_val(self):
@@ -275,6 +317,7 @@ class CT_Styles(BaseOxmlElement):
     """``<w:styles>`` element, the root element of a styles part, i.e. styles.xml."""
 
     _tag_seq = ("w:docDefaults", "w:latentStyles", "w:style")
+    docDefaults = ZeroOrOne("w:docDefaults", successors=_tag_seq[1:])
     latentStyles = ZeroOrOne("w:latentStyles", successors=_tag_seq[2:])
     style = ZeroOrMore("w:style", successors=())
     del _tag_seq
