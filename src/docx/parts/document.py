@@ -101,8 +101,6 @@ class DocumentPart(StoryPart):
             numbering_part = NumberingPart.new()
             self.relate_to(numbering_part, RT.NUMBERING)
             return numbering_part
-    
-    
 
     def save(self, path_or_stream):
         """Save this document to `path_or_stream`, which can be either a path to a
@@ -156,7 +154,7 @@ class DocumentPart(StoryPart):
         A |Comments| object providing read/write access to the core
         properties of this document.
         """
-        # return self.package._comments_part
+        return self.package._comments_part
 
     @property
     def _comments_part(self):
@@ -178,4 +176,4 @@ class DocumentPart(StoryPart):
         except KeyError:
             footnotes_part = FootnotesPart.default(self)
             self.relate_to(footnotes_part, RT.FOOTNOTES)
-            return  footnotes_part
+            return footnotes_part

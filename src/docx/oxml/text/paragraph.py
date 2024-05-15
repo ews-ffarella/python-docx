@@ -40,6 +40,14 @@ class CT_P(BaseOxmlElement):
         self.addprevious(new_p)
         return new_p
 
+    def add_p_after(self) -> CT_P:
+        """
+        Return a new ``<w:p>`` element inserted directly after this one.
+        """
+        new_p = cast(CT_P, OxmlElement('w:p'))
+        self.addnext(new_p)
+        return new_p
+
     def link_comment(self, _id, rangeStart=0, rangeEnd=0):
         rStart = OxmlElement('w:commentRangeStart')
         rStart._id = _id
