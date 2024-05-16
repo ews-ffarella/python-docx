@@ -5,11 +5,9 @@ Release History
 
 1.0.0 (2024-05-DD)
 ++++++++++++++++++
-
-Merge in upstream through python-openxml/python-docx:1.1.2
-
-* change package name to python-docx-bb to avoid confusion with version
+- change package name to python-docx-bb to avoid confusion with version
   numbers and pypi
+- DEV-3948: Merge in upstream through python-openxml/python-docx:1.1.2
 
 +---------------------+------------------------------------------------------------------------------------------------+
 | python-openxml      | Changes                                                                                        |
