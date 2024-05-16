@@ -6,9 +6,10 @@ from docx.opc.constants import CONTENT_TYPE as CT
 from ..opc.packuri import PackURI
 
 from docx.oxml import parse_xml
-from ..opc.part import XmlPart
+from docx.parts.story import StoryPart
 
-class CommentsPart(XmlPart):
+
+class CommentsPart(StoryPart):
     """Definition of Comments Part"""
 
     @classmethod
