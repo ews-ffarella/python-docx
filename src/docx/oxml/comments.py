@@ -1,6 +1,7 @@
 """
 Custom element classes related to the comments part
 """
+from typing import Callable
 
 from docx.oxml.parser import OxmlElement
 from docx.oxml.simpletypes import ST_DecimalNumber, ST_String
@@ -8,7 +9,7 @@ from docx.opc.constants import NAMESPACE
 from docx.text.paragraph import Paragraph
 from docx.text.run import Run
 from docx.oxml.xmlchemy import (
-	BaseOxmlElement, OneAndOnlyOne, RequiredAttribute, ZeroOrMore, ZeroOrOne
+	BaseOxmlElement, RequiredAttribute, ZeroOrMore, ZeroOrOne
 )
 
 
@@ -57,9 +58,10 @@ class CT_Comments(BaseOxmlElement):
 	"""
 	A ``<w:comments>`` element, a container for Comments properties
 	"""
-	comment = ZeroOrMore ('w:comment', successors=('w:comments',))
+	_insert_comment: Callable[..., CT_Com]
+	comment = ZeroOrMore('w:comment', successors=('w:comments',))
 
-	def add_comment(self,author, initials, date):
+	def add_comment(self, author, initials, date):
 		_next_id = self._next_commentId
 		comment = CT_Com.new(initials, _next_id, date, author)
 		comment = self._insert_comment(comment)
