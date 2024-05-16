@@ -154,7 +154,7 @@ class DocumentPart(StoryPart):
         A |Comments| object providing read/write access to the core
         properties of this document.
         """
-        return self.package._comments_part
+        return self._comments_part
 
     @property
     def _comments_part(self):
