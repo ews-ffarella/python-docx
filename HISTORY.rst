@@ -5,9 +5,10 @@ Release History
 
 1.0.0 (2024-05-DD)
 ++++++++++++++++++
-- change package name to python-docx-bb to avoid confusion with version
+- change package name to `python-docx-bb` to avoid confusion with version
   numbers and pypi
-- DEV-3948: Merge in upstream through python-openxml/python-docx:1.1.2
+- DEV-3948: Merge in upstream through `python-openxml/python-docx:1.1.2`
+- DEV-3861: add Custom Properties support from `michael-koeller:feature/custom_properties`
 
 +---------------------+------------------------------------------------------------------------------------------------+
 | python-openxml      | Changes                                                                                        |
@@ -46,13 +47,11 @@ Release History
 ++++++++++++++++++
 - DEV-2649: add shd tag to TcPr for colored table cells
 - Fix "text" attr setter for CT_DR and CT_IR
-- DEV-3177: get children anywhere for all_runs for CT_IR to support runs
-    nested inside of deletes
+- DEV-3177: get children anywhere for all_runs for CT_IR to support runs nested inside of deletes
 
 0.4.6 (2023-05-26)
 ++++++++++++++++++
-- DEV-3195: wrap int() call in float() so we can read float vals of size attrs
-    in e.g. w:spacing tags
+- DEV-3195: wrap int() call in float() so we can read float vals of size attrs in e.g. w:spacing tags
 
 0.4.5 (2023-02-06)
 ++++++++++++++++++
@@ -73,14 +72,14 @@ Release History
 
 0.4.1 (2022-01-31)
 ++++++++++++++++++
-DEV-1405: Comments in edit transfer
+- DEV-1405: Comments in edit transfer
 - Adds all_runs property to Ins and Del objects
     +  Allows us to get comments that affect runs inside Ins and Del
 - changes `comments` property of Paragraph to use all_runs instead of runs
     + allows us to get comments from Ins and Del runs
 
 0.4.1-rc.1 (2022-01-21)
-++++++++++++++++++
++++++++++++++++++++++++
 - Adds ability to get all runs from Ins and Del objects
     +  Allows us to get comments that affect runs inside Ins and Del
 
@@ -93,7 +92,6 @@ DEV-1405: Comments in edit transfer
 
 0.3 (2021-09-01)
 ++++++++++++++++++
-
 - Upgrade BlackBoiler fork of bb-docx to python-openxml v0.8.11
 
 +---------------------+---------------------------------------------------------------------------------------------------------------------------------------+
