@@ -342,6 +342,7 @@ class CT_PPr(BaseOxmlElement):
     def sectpr(self):
         return self.sectPr
 
+
 class CT_Spacing(BaseOxmlElement):
     """``<w:spacing>`` element, specifying paragraph spacing attributes such as space
     before and line spacing."""
