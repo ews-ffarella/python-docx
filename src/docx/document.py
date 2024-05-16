@@ -15,7 +15,7 @@ from docx.shared import ElementProxy, Emu
 from docx.oxml.ns import qn
 
 if TYPE_CHECKING:
-    from docx import types as t
+    import docx.types as t
     from docx.oxml.document import CT_Body, CT_Document
     from docx.parts.document import DocumentPart
     from docx.settings import Settings
@@ -64,9 +64,7 @@ class Document(ElementProxy):
         paragraph.add_run().add_break(WD_BREAK.PAGE)
         return paragraph
 
-    def add_paragraph(
-        self, text: str = "", style: str | ParagraphStyle | None = None
-    ) -> Paragraph:
+    def add_paragraph(self, text: str = "", style: str | ParagraphStyle | None = None) -> Paragraph:
         """Return paragraph newly added to the end of the document.
 
         The paragraph is populated with `text` and having paragraph style `style`.

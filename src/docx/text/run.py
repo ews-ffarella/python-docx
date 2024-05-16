@@ -5,7 +5,6 @@ from __future__ import annotations
 from typing import IO, TYPE_CHECKING, Iterator, cast
 from datetime import datetime
 
-from docx import types as t
 from docx.drawing import Drawing
 from docx.enum.style import WD_STYLE_TYPE
 from docx.enum.text import WD_BREAK
@@ -20,6 +19,7 @@ from docx.text.pagebreak import RenderedPageBreak
 from docx.text.comment import Comment
 
 if TYPE_CHECKING:
+    import docx.types as t
     from docx.enum.text import WD_UNDERLINE
     from docx.oxml.text.run import CT_R, CT_Text
     from docx.shared import Length
@@ -62,8 +62,8 @@ class Run(StoryChild):
     def add_picture(
         self,
         image_path_or_stream: str | IO[bytes],
-        width: Length | None = None,
-        height: Length | None = None,
+        width: int | Length | None = None,
+        height: int | Length | None = None,
     ) -> InlineShape:
         """Return |InlineShape| containing image identified by `image_path_or_stream`.
 
@@ -190,9 +190,7 @@ class Run(StoryChild):
                 yield item
             elif isinstance(item, CT_LastRenderedPageBreak):
                 yield RenderedPageBreak(item, self)
-            elif isinstance(  # pyright: ignore[reportUnnecessaryIsInstance]
-                item, CT_Drawing
-            ):
+            elif isinstance(item, CT_Drawing):  # pyright: ignore[reportUnnecessaryIsInstance]
                 yield Drawing(item, self)
 
     @property
@@ -205,9 +203,7 @@ class Run(StoryChild):
         property to |None| removes any directly-applied character style.
         """
         style_id = self._r.style
-        return cast(
-            CharacterStyle, self.part.get_style(style_id, WD_STYLE_TYPE.CHARACTER)
-        )
+        return cast(CharacterStyle, self.part.get_style(style_id, WD_STYLE_TYPE.CHARACTER))
 
     @style.setter
     def style(self, style_or_name: str | CharacterStyle | None):
