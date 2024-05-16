@@ -5,10 +5,11 @@ Release History
 
 1.0.0 (2024-05-DD)
 ++++++++++++++++++
-- change package name to `python-docx-bb` to avoid confusion with version
+
+- change package name to ``python-docx-bb`` to avoid confusion with version
   numbers and pypi
-- DEV-3948: Merge in upstream through `python-openxml/python-docx:1.1.2`
-- DEV-3861: add Custom Properties support from `michael-koeller:feature/custom_properties`
+- DEV-3948: Merge in upstream through ``python-openxml/python-docx:1.1.2``
+- DEV-3861: add Custom Properties support from ``michael-koeller:feature/custom_properties``
 
 +---------------------+------------------------------------------------------------------------------------------------+
 | python-openxml      | Changes                                                                                        |
@@ -43,45 +44,60 @@ Release History
 |                     | - Add Section.iter_inner_content()                                                             |
 +---------------------+------------------------------------------------------------------------------------------------+
 
+
 0.4.7 (2023-07-19)
 ++++++++++++++++++
 - DEV-2649: add shd tag to TcPr for colored table cells
 - Fix "text" attr setter for CT_DR and CT_IR
 - DEV-3177: get children anywhere for all_runs for CT_IR to support runs nested inside of deletes
 
+
 0.4.6 (2023-05-26)
 ++++++++++++++++++
 - DEV-3195: wrap int() call in float() so we can read float vals of size attrs in e.g. w:spacing tags
 
+
 0.4.5 (2023-02-06)
 ++++++++++++++++++
-- DEV-2853: fix `all_runs` methods of Ins and Del objects
+
+- DEV-2853: fix ``all_runs`` methods of Ins and Del objects
+
 
 0.4.4 (2022-09-14)
 ++++++++++++++++++
-- DEV-1807: fix `text` property of CT_IR and CT_DR
+
+- DEV-1807: fix ``text`` property of CT_IR and CT_DR
+
 
 0.4.3 (2022-05-13)
 ++++++++++++++++++
-- DEV-1907: remove self-added `br` property from CT_R
+
+- DEV-1907: remove self-added ``br`` property from CT_R
     + having it there seemed to remove methods added by ZeroOrMore()
+
 
 0.4.2 (2022-04-11)
 ++++++++++++++++++
+
 - Adds attributes to access more information about formatting
+
 
 0.4.1 (2022-01-31)
 ++++++++++++++++++
+
 - DEV-1405: Comments in edit transfer
 - Adds all_runs property to Ins and Del objects
     +  Allows us to get comments that affect runs inside Ins and Del
-- changes `comments` property of Paragraph to use all_runs instead of runs
+- changes ``comments`` property of Paragraph to use all_runs instead of runs
     + allows us to get comments from Ins and Del runs
+
 
 0.4.1-rc.1 (2022-01-21)
 +++++++++++++++++++++++
+
 - Adds ability to get all runs from Ins and Del objects
     +  Allows us to get comments that affect runs inside Ins and Del
+
 
 0.4 (2021-12-07)
 ++++++++++++++++++
@@ -115,6 +131,7 @@ Release History
 |                     | - Add #175: refine MANIFEST.ini                                                                                                       |
 |                     | - Add #168: Unicode error on core-props in Python 2"                                                                                  |
 +---------------------+---------------------------------------------------------------------------------------------------------------------------------------+
+
 
 0.2 (2019-04-19)
 ++++++++++++++++++
