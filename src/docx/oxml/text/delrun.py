@@ -53,9 +53,8 @@ class CT_DR(BaseOxmlElement):
 
     def clear_content(self):
         """
-        Remove all child elements except the ``<w:rPr>`` element if present.
+        Remove all child elements.
         """
-        # content_child_elms = self[1:] if self.rPr is not None else self[:]
         for child in self[:]:
             self.remove(child)
 

@@ -13,7 +13,7 @@ from docx.api import Document
 if TYPE_CHECKING:
     from docx.opc.part import Part
 
-__version__ = "1.0.0-dev"
+__version__ = "1.0.0-rc1"
 
 
 __all__ = ["Document"]
@@ -25,6 +25,7 @@ from docx.opc.constants import CONTENT_TYPE as CT
 from docx.opc.constants import RELATIONSHIP_TYPE as RT
 from docx.opc.part import PartFactory
 from docx.opc.parts.coreprops import CorePropertiesPart
+from docx.opc.parts.customprops import CustomPropertiesPart
 from docx.parts.document import DocumentPart
 from docx.parts.hdrftr import FooterPart, HeaderPart
 from docx.parts.image import ImagePart
@@ -44,6 +45,7 @@ def part_class_selector(content_type: str, reltype: str) -> Type[Part] | None:
 PartFactory.part_class_selector = part_class_selector
 PartFactory.part_type_for[CT.WML_COMMENTS] = CommentsPart
 PartFactory.part_type_for[CT.OPC_CORE_PROPERTIES] = CorePropertiesPart
+PartFactory.part_type_for[CT.OPC_CUSTOM_PROPERTIES] = CustomPropertiesPart
 PartFactory.part_type_for[CT.WML_DOCUMENT_MAIN] = DocumentPart
 PartFactory.part_type_for[CT.WML_FOOTER] = FooterPart
 PartFactory.part_type_for[CT.WML_HEADER] = HeaderPart
