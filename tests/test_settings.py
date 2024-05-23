@@ -1,8 +1,4 @@
-# encoding: utf-8
-
-"""Unit test suite for the docx.settings module"""
-
-from __future__ import absolute_import, division, print_function, unicode_literals
+"""Unit test suite for the docx.settings module."""
 
 import pytest
 
@@ -11,8 +7,7 @@ from docx.settings import Settings
 from .unitutil.cxml import element, xml
 
 
-class DescribeSettings(object):
-
+class DescribeSettings:
     def it_knows_when_the_document_has_distinct_odd_and_even_headers(
         self, odd_and_even_get_fixture
     ):
@@ -56,7 +51,7 @@ class DescribeSettings(object):
             (
                 "w:settings/w:evenAndOddHeaders{w:val=1}",
                 True,
-                "w:settings/w:evenAndOddHeaders"
+                "w:settings/w:evenAndOddHeaders",
             ),
             ("w:settings/w:evenAndOddHeaders{w:val=off}", False, "w:settings"),
         ]

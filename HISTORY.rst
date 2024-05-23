@@ -3,6 +3,45 @@
 Release History
 ---------------
 
+1.0.0 (2024-05-DD)
+++++++++++++++++++
+- change package name to python-docx-bb to avoid confusion with version
+  numbers and pypi
+- DEV-3948: Merge in upstream through python-openxml/python-docx:1.1.2
+
++---------------------+------------------------------------------------------------------------------------------------+
+| python-openxml      | Changes                                                                                        |
++=====================+================================================================================================+
+| 1.1.2 (2024-05-01)  | - Fix #1383 Revert lxml<=4.9.2 pin that breaks Python 3.12 install                             |
+|                     | - Fix #1385 Support use of Part._rels by python-docx-template                                  |
+|                     | - Add support and testing for Python 3.12                                                      |
++---------------------+------------------------------------------------------------------------------------------------+
+| 1.1.1 (2024-04-29)  | - Fix #531, #1146 Index error on table with misaligned borders                                 |
+|                     | - Fix #1335 Tolerate invalid float value in bottom-margin                                      |
+|                     | - Fix #1337 Do not require typing-extensions at runtime                                        |
++---------------------+------------------------------------------------------------------------------------------------+
+| 1.1.0 (2023-11-03)  | - Add BlockItemContainer.iter_inner_content()                                                  |
++---------------------+------------------------------------------------------------------------------------------------+
+| 1.0.1 (2023-10-12)  | - Fix #1256: parse_xml() and OxmlElement moved.                                                |
+|                     | - Add Hyperlink.fragment and .url                                                              |
++---------------------+------------------------------------------------------------------------------------------------+
+| 1.0.0 (2023-10-01)  | - Remove Python 2 support. Supported versions are 3.7+                                         |
+|                     | - Fix #85:   Paragraph.text includes hyperlink text                                            |
+|                     | - Add #1113: Hyperlink.address                                                                 |
+|                     | - Add Hyperlink.contains_page_break                                                            |
+|                     | - Add Hyperlink.runs                                                                           |
+|                     | - Add Hyperlink.text                                                                           |
+|                     | - Add Paragraph.contains_page_break                                                            |
+|                     | - Add Paragraph.hyperlinks                                                                     |
+|                     | - Add Paragraph.iter_inner_content()                                                           |
+|                     | - Add Paragraph.rendered_page_breaks                                                           |
+|                     | - Add RenderedPageBreak.following_paragraph_fragment                                           |
+|                     | - Add RenderedPageBreak.preceding_paragraph_fragment                                           |
+|                     | - Add Run.contains_page_break                                                                  |
+|                     | - Add Run.iter_inner_content()                                                                 |
+|                     | - Add Section.iter_inner_content()                                                             |
++---------------------+------------------------------------------------------------------------------------------------+
+
 0.4.7 (2023-07-19)
 ++++++++++++++++++
 - DEV-2649: add shd tag to TcPr for colored table cells
@@ -19,7 +58,6 @@ Release History
 ++++++++++++++++++
 - DEV-2853: fix `all_runs` methods of Ins and Del objects
 
-
 0.4.4 (2022-09-14)
 ++++++++++++++++++
 - DEV-1807: fix `text` property of CT_IR and CT_DR
@@ -32,7 +70,6 @@ Release History
 0.4.2 (2022-04-11)
 ++++++++++++++++++
 - Adds attributes to access more information about formatting
-
 
 0.4.1 (2022-01-31)
 ++++++++++++++++++

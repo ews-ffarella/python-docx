@@ -1,10 +1,4 @@
-# encoding: utf-8
-
-"""
-Test suite for the docx.parts.styles module
-"""
-
-from __future__ import absolute_import, print_function, unicode_literals
+"""Test suite for the docx.parts.styles module."""
 
 import pytest
 
@@ -17,8 +11,7 @@ from docx.styles.styles import Styles
 from ..unitutil.mock import class_mock, instance_mock
 
 
-class DescribeStylesPart(object):
-
+class DescribeStylesPart:
     def it_provides_access_to_its_styles(self, styles_fixture):
         styles_part, Styles_, styles_ = styles_fixture
         styles = styles_part.styles
@@ -29,7 +22,7 @@ class DescribeStylesPart(object):
         package = OpcPackage()
         styles_part = StylesPart.default(package)
         assert isinstance(styles_part, StylesPart)
-        assert styles_part.partname == '/word/styles.xml'
+        assert styles_part.partname == "/word/styles.xml"
         assert styles_part.content_type == CT.WML_STYLES
         assert styles_part.package is package
         assert len(styles_part.element) == 6
@@ -45,9 +38,7 @@ class DescribeStylesPart(object):
 
     @pytest.fixture
     def Styles_(self, request, styles_):
-        return class_mock(
-            request, 'docx.parts.styles.Styles', return_value=styles_
-        )
+        return class_mock(request, "docx.parts.styles.Styles", return_value=styles_)
 
     @pytest.fixture
     def styles_(self, request):

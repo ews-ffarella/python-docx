@@ -1,25 +1,15 @@
-# encoding: utf-8
-
-"""
-Test suite for the docx.api module
-"""
-
-from __future__ import (
-    absolute_import, division, print_function, unicode_literals
-)
+"""Test suite for the docx.api module."""
 
 import pytest
 
 import docx
-
 from docx.api import Document
 from docx.opc.constants import CONTENT_TYPE as CT
 
-from .unitutil.mock import function_mock, instance_mock, class_mock
+from .unitutil.mock import class_mock, function_mock, instance_mock
 
 
-class DescribeDocument(object):
-
+class DescribeDocument:
     def it_opens_a_docx_file(self, open_fixture):
         docx, Package_, document_ = open_fixture
         document = Document(docx)
@@ -34,14 +24,14 @@ class DescribeDocument(object):
 
     def it_raises_on_not_a_Word_file(self, raise_fixture):
         not_a_docx = raise_fixture
-        with pytest.raises(ValueError):
+        with pytest.raises(ValueError, match="file 'foobar.xlsx' is not a Word file,"):
             Document(not_a_docx)
 
     # fixtures -------------------------------------------------------
 
     @pytest.fixture
     def default_fixture(self, _default_docx_path_, Package_, document_):
-        docx = 'barfoo.docx'
+        docx = "barfoo.docx"
         _default_docx_path_.return_value = docx
         document_part = Package_.open.return_value.main_document_part
         document_part.document = document_
@@ -50,7 +40,7 @@ class DescribeDocument(object):
 
     @pytest.fixture
     def open_fixture(self, Package_, document_):
-        docx = 'foobar.docx'
+        docx = "foobar.docx"
         document_part = Package_.open.return_value.main_document_part
         document_part.document = document_
         document_part.content_type = CT.WML_DOCUMENT_MAIN
@@ -58,15 +48,15 @@ class DescribeDocument(object):
 
     @pytest.fixture
     def raise_fixture(self, Package_):
-        not_a_docx = 'foobar.xlsx'
-        Package_.open.return_value.main_document_part.content_type = 'BOGUS'
+        not_a_docx = "foobar.xlsx"
+        Package_.open.return_value.main_document_part.content_type = "BOGUS"
         return not_a_docx
 
     # fixture components ---------------------------------------------
 
     @pytest.fixture
     def _default_docx_path_(self, request):
-        return function_mock(request, 'docx.api._default_docx_path')
+        return function_mock(request, "docx.api._default_docx_path")
 
     @pytest.fixture
     def document_(self, request):
@@ -74,4 +64,4 @@ class DescribeDocument(object):
 
     @pytest.fixture
     def Package_(self, request):
-        return class_mock(request, 'docx.api.Package')
+        return class_mock(request, "docx.api.Package")
