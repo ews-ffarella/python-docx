@@ -1,15 +1,8 @@
-# encoding: utf-8
-
-"""
-Used by behave to set testing environment before and after running acceptance
-tests.
-"""
+"""Set testing environment before and after behave acceptance test runs."""
 
 import os
 
-scratch_dir = os.path.abspath(
-    os.path.join(os.path.split(__file__)[0], '_scratch')
-)
+scratch_dir = os.path.abspath(os.path.join(os.path.split(__file__)[0], "_scratch"))
 
 
 def before_all(context):
