@@ -3,7 +3,7 @@
 Release History
 ---------------
 
-1.0.0 (2024-05-DD)
+1.0.0 (2024-05-23)
 ++++++++++++++++++
 
 - change package name to ``python-docx-bb`` to avoid confusion with version
