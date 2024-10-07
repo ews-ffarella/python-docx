@@ -23,8 +23,8 @@ class CT_CustomProperties(BaseOxmlElement):
     part stored as ``/docProps/custom.xml``. String elements are
     limited in length to 255 unicode characters.
     """
-
-    _customProperties_tmpl = "<cup:Properties %s/>\n" % nsdecls("cup", "vt")
+    xmlns = 'xmlns="http://schemas.openxmlformats.org/officeDocument/2006/custom-properties"'
+    _customProperties_tmpl = "<Properties %s/>\n" % (xmlns + " " + nsdecls("vt"))
     _offset_pattern = re.compile("([+-])(\\d\\d):(\\d\\d)")
 
     @classmethod
