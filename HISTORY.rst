@@ -3,6 +3,12 @@
 Release History
 ---------------
 
+1.0.1 (2024-10-11)
+++++++++++++++++++
+
+- DEV-4268: Fix namespace issues with Custom Properties raising Unreadable Content error for MS Word users
+
+
 1.0.0 (2024-05-23)
 ++++++++++++++++++
 
