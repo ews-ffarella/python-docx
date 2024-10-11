@@ -16,21 +16,19 @@ from docx.oxml.xmlchemy import BaseOxmlElement
 from docx.oxml import parse_xml
 
 
-
 class CT_CustomProperties(BaseOxmlElement):
     """
     ``<Properties>`` element, the root element of the Custom Properties
     part stored as ``/docProps/custom.xml``. String elements are
     limited in length to 255 unicode characters.
     """
-    xmlns = 'xmlns="http://schemas.openxmlformats.org/officeDocument/2006/custom-properties"'
-    _customProperties_tmpl = "<Properties %s/>\n" % (xmlns + " " + nsdecls("vt"))
+    _customProperties_tmpl = "<op:Properties %s/>\n" % nsdecls("op", "vt")
     _offset_pattern = re.compile("([+-])(\\d\\d):(\\d\\d)")
 
     @classmethod
     def new(cls):
         """
-        Return a new ``<property>`` element
+        Return a new ``<op:Properties>`` element
         """
         xml = cls._customProperties_tmpl
         custom_properties = parse_xml(xml)
