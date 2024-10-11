@@ -25,7 +25,7 @@ class CustomProperties(object):
         prop = self.lookup(item)
         if prop is not None:
             elm = prop[0]
-            if elm.tag == qn("vt:14"):
+            if elm.tag == qn("vt:i4"):
                 try:
                     return int(elm.text)
                 except ValueError:
