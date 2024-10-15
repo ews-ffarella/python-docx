@@ -81,7 +81,7 @@ class CT_Inline(BaseOxmlElement):
     def new(cls, cx: Length, cy: Length, shape_id: int, pic: CT_Picture) -> CT_Inline:
         """Return a new ``<wp:inline>`` element populated with the values passed as
         parameters."""
-        inline = cast(CT_Inline, parse_xml(cls._inline_xml()))
+        inline = cast(CT_Inline, parse_xml(cls._inline_xml(ns=("wp", "a", "pic", "r", "asvg"))))
         inline.extent.cx = cx
         inline.extent.cy = cy
         inline.docPr.id = shape_id
@@ -105,7 +105,7 @@ class CT_Inline(BaseOxmlElement):
         return inline
 
     @classmethod
-    def _inline_xml(cls):
+    def _inline_xml(cls, ns=("wp", "a", "pic", "r")):
         return (
             "<wp:inline %s>\n"
             '  <wp:extent cx="914400" cy="914400"/>\n'
@@ -116,7 +116,7 @@ class CT_Inline(BaseOxmlElement):
             "  <a:graphic>\n"
             '    <a:graphicData uri="URI not set"/>\n'
             "  </a:graphic>\n"
-            "</wp:inline>" % nsdecls("wp", "a", "pic", "r", "asvg")
+            "</wp:inline>" % nsdecls(*ns)
         )
 
 
@@ -213,7 +213,7 @@ class CT_Picture(BaseOxmlElement):
             "    </a:xfrm>\n"
             '    <a:prstGeom prst="rect"/>\n'
             "  </pic:spPr>\n"
-            "</pic:pic>" % nsdecls("pic", "a", "r", "asvg")
+            "</pic:pic>" % nsdecls("pic", "a", "r")
         )
 
 
