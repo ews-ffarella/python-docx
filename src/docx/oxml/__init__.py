@@ -90,7 +90,7 @@ register_element_cls("cp:coreProperties", CT_CoreProperties)
 
 from .customprops import CT_CustomProperties  # noqa
 
-register_element_cls('op:Properties', CT_CustomProperties)
+register_element_cls("op:Properties", CT_CustomProperties)
 
 from .document import CT_Body, CT_Document  # noqa
 
@@ -131,13 +131,19 @@ from .settings import CT_Settings  # noqa
 register_element_cls("w:settings", CT_Settings)
 
 from .styles import (  # noqa
-    CT_DocDefaults, CT_RPrDefault, CT_PPrDefault, CT_LatentStyles, CT_LsdException, CT_Style, CT_Styles
+    CT_DocDefaults,
+    CT_RPrDefault,
+    CT_PPrDefault,
+    CT_LatentStyles,
+    CT_LsdException,
+    CT_Style,
+    CT_Styles,
 )
 
 register_element_cls("w:basedOn", CT_String)
-register_element_cls("w:docDefaults",   CT_DocDefaults)
-register_element_cls("w:rPrDefault",   CT_RPrDefault)
-register_element_cls("w:pPrDefault",   CT_PPrDefault)
+register_element_cls("w:docDefaults", CT_DocDefaults)
+register_element_cls("w:rPrDefault", CT_RPrDefault)
+register_element_cls("w:pPrDefault", CT_PPrDefault)
 register_element_cls("w:latentStyles", CT_LatentStyles)
 register_element_cls("w:locked", CT_OnOff)
 register_element_cls("w:lsdException", CT_LsdException)
@@ -168,7 +174,7 @@ from .table import (  # noqa
     CT_VerticalJc,
     CT_TblBoarders,
     CT_Bottom,
-    CT_TcBorders
+    CT_TcBorders,
 )
 
 register_element_cls("w:bidiVisual", CT_OnOff)
@@ -261,19 +267,23 @@ register_element_cls("w:tabs", CT_TabStops)
 register_element_cls("w:widowControl", CT_OnOff)
 
 from .text.run import CT_Br, CT_R, CT_Text, CT_DelText  # noqa
+
 register_element_cls("w:br", CT_Br)
-register_element_cls("w:r",  CT_R)
-register_element_cls("w:t",  CT_Text)
+register_element_cls("w:r", CT_R)
+register_element_cls("w:t", CT_Text)
 register_element_cls("w:delText", CT_DelText)
 register_element_cls("w:rPr", CT_RPr)
 
 from .text.delrun import CT_DR
+
 register_element_cls("w:del", CT_DR)
 
 from .text.insrun import CT_IR
+
 register_element_cls("w:ins", CT_IR)
 
-from .comments import CT_Comments, CT_Com, CT_CRE, CT_CRS, CT_CRef
+from .comments import CT_CRE, CT_CRS, CT_Com, CT_Comments, CT_CRef
+
 register_element_cls("w:comments", CT_Comments)
 register_element_cls("w:comment", CT_Com)
 register_element_cls("w:commentRangeStart", CT_CRS)
@@ -281,7 +291,8 @@ register_element_cls("w:commentRangeEnd", CT_CRE)
 register_element_cls("w:commentReference", CT_CRef)
 
 
-from .footnotes import CT_Footnotes, CT_Footnote, CT_FNR, CT_FootnoteRef
+from .footnotes import CT_FNR, CT_Footnote, CT_FootnoteRef, CT_Footnotes
+
 register_element_cls("w:footnotes", CT_Footnotes)
 register_element_cls("w:footnote", CT_Footnote)
 register_element_cls("w:footnoteReference", CT_FNR)

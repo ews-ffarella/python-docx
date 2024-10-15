@@ -26,14 +26,14 @@ from docx.opc.constants import RELATIONSHIP_TYPE as RT
 from docx.opc.part import PartFactory
 from docx.opc.parts.coreprops import CorePropertiesPart
 from docx.opc.parts.customprops import CustomPropertiesPart
+from docx.parts.comments import CommentsPart
 from docx.parts.document import DocumentPart
+from docx.parts.footnotes import FootnotesPart
 from docx.parts.hdrftr import FooterPart, HeaderPart
 from docx.parts.image import ImagePart
 from docx.parts.numbering import NumberingPart
 from docx.parts.settings import SettingsPart
 from docx.parts.styles import StylesPart
-from docx.parts.comments import CommentsPart
-from docx.parts.footnotes import FootnotesPart
 
 
 def part_class_selector(content_type: str, reltype: str) -> Type[Part] | None:

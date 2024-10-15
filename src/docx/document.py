@@ -10,9 +10,9 @@ from typing import IO, TYPE_CHECKING, Iterator, List
 from docx.blkcntnr import BlockItemContainer
 from docx.enum.section import WD_SECTION
 from docx.enum.text import WD_BREAK
+from docx.oxml.ns import qn
 from docx.section import Section, Sections
 from docx.shared import ElementProxy, Emu
-from docx.oxml.ns import qn
 
 if TYPE_CHECKING:
     import docx.types as t
@@ -32,12 +32,7 @@ class Document(ElementProxy):
     a document.
     """
 
-    def __init__(
-            self,
-            element: CT_Document,
-            part: DocumentPart,
-            fudge_markers: bool = False
-    ):
+    def __init__(self, element: CT_Document, part: DocumentPart, fudge_markers: bool = False):
         super(Document, self).__init__(element)
         self._element = element
         self._part = part
@@ -123,14 +118,13 @@ class Document(ElementProxy):
 
         # dig up id of enumeration and indentation level for each paragraph
         # (iff relevant)
-        paras_numPr = [p._element.xpath(".//w:numPr")
-                       for p in self.paragraphs]
+        paras_numPr = [p._element.xpath(".//w:numPr") for p in self.paragraphs]
         try:
             get = lambda pth, x: x.xpath(pth)[0].attrib.values()[0]
-            para_num_groups = [(get(".//w:numId", p[0]),
-                                get(".//w:ilvl", p[0])) if p
-                               else None
-                               for p in paras_numPr]
+            para_num_groups = [
+                (get(".//w:numId", p[0]), get(".//w:ilvl", p[0])) if p else None
+                for p in paras_numPr
+            ]
         except:
             # Abort silently.
             # self.fudge_status = "Aborted at search for numIds."
@@ -161,16 +155,12 @@ class Document(ElementProxy):
 
         # Overwrite the existing representation of the text in
         for par, num in zip(self.paragraphs, para_nums):
-            if num is None: continue
+            if num is None:
+                continue
             # print(num, par.text)
-            par.text = " ".join([num + ")",
-                                 "" if par.text is None else par.text])
+            par.text = " ".join([num + ")", "" if par.text is None else par.text])
 
-    def add_comment(self, start_run, end_run,
-                    author,
-                    dtime,
-                    comment_text,
-                    initials=None):
+    def add_comment(self, start_run, end_run, author, dtime, comment_text, initials=None):
         """Add comment spanning over one or more runs.
 
         Args:
@@ -190,14 +180,17 @@ class Document(ElementProxy):
             # 'BlackBoiler' --> 'BB'
             # 'Ryan Mannion' --> 'RM'
             # 'ryan mannion' --> ''
-            def upper(n): return "".join([c for c in n if c.isupper()])
+            def upper(n):
+                return "".join([c for c in n if c.isupper()])
+
             # Splitter: split name and use first chars to determine initials
             # ryan mannion --> RM
             # ryan --> R
-            def splitter(n): return "".join([t[0] for t in n.split(" ")]).upper()
+            def splitter(n):
+                return "".join([t[0] for t in n.split(" ")]).upper()
 
             initials = upper(author)
-            if initials == '':
+            if initials == "":
                 initials = splitter(author)
 
         comment_part_element = self.comments_part.element
@@ -305,7 +298,7 @@ class Document(ElementProxy):
     @property
     def last_abs_num(self):
         last = self.abstractNumIds[-1]
-        val = last.attrib.get(qn('w:abstractNumId'))
+        val = last.attrib.get(qn("w:abstractNumId"))
         return last, val
 
     @property

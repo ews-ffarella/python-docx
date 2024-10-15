@@ -11,24 +11,24 @@ Custom element classes related to delete runs (CT_DR).
 """
 
 from docx.oxml.ns import qn
-from docx.oxml.simpletypes import ST_BrClear, ST_BrType
 from docx.oxml.parser import OxmlElement
-from docx.oxml.xmlchemy import (BaseOxmlElement, OptionalAttribute, ZeroOrMore, ZeroOrOne)
+from docx.oxml.xmlchemy import BaseOxmlElement, ZeroOrMore
 
 
 class CT_DR(BaseOxmlElement):
     """
     ``<w:del>`` element, containing the properties and text for a delete run.
     """
-    r = ZeroOrMore('w:r')
+
+    r = ZeroOrMore("w:r")
 
     def add_dt(self, text):
         """
         Return a newly added ''<w:delText>'' element containing *text*.
         """
-        self._r=self._add_r(deltext=text)
+        self._r = self._add_r(deltext=text)
         if len(text.strip()) < len(text):
-            self._r.set(qn('xml:space'), 'preserve')
+            self._r.set(qn("xml:space"), "preserve")
         return self._r
 
     @property
@@ -38,7 +38,7 @@ class CT_DR(BaseOxmlElement):
         child elements like ``<w:tab/>`` translated to their Python
         equivalent.
         """
-        text = ''
+        text = ""
         for child in self:
             if child.tag == qn("w:r"):
                 text += child.text
@@ -58,7 +58,7 @@ class CT_DR(BaseOxmlElement):
         for child in self[:]:
             self.remove(child)
 
-    def copy_rpr(self,rprCopy):
+    def copy_rpr(self, rprCopy):
         rPr = self._r.get_or_add_rPr()
         for p in rprCopy[:]:
             rPr.append(p)
@@ -91,6 +91,7 @@ class CT_DR(BaseOxmlElement):
         rPr = self._r.get_or_add_rPr()
         rPr.style = style
 
+
 class _RunContentAppender(object):
     """
     Service object that knows how to translate a Python string into run
@@ -100,6 +101,7 @@ class _RunContentAppender(object):
     appended. Likewise a newline or carriage return character ('\n', '\r')
     causes a ``<w:cr>`` element to be appended.
     """
+
     def __init__(self, r):
         self._r = r
         self._bfr = []
@@ -131,17 +133,17 @@ class _RunContentAppender(object):
         which must be called at the end of text to ensure any pending
         ``<w:t>`` element is written.
         """
-        if char == '\t':
+        if char == "\t":
             self.flush()
             self._r.add_tab()
-        elif char in '\r\n':
+        elif char in "\r\n":
             self.flush()
             self._r.add_br()
         else:
             self._bfr.append(char)
 
     def flush(self):
-        text = ''.join(self._bfr)
+        text = "".join(self._bfr)
         if text:
             self._r.add_dt(text)
         del self._bfr[:]

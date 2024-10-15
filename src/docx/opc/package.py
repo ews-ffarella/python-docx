@@ -11,9 +11,9 @@ from docx.opc.parts.coreprops import CorePropertiesPart
 from docx.opc.parts.customprops import CustomPropertiesPart
 from docx.opc.pkgreader import PackageReader
 from docx.opc.pkgwriter import PackageWriter
+from docx.opc.rel import Relationships
 from docx.parts.comments import CommentsPart
 from docx.parts.footnotes import FootnotesPart
-from docx.opc.rel import Relationships
 from docx.shared import lazyproperty
 
 if TYPE_CHECKING:
@@ -227,7 +227,7 @@ class OpcPackage:
         except KeyError:
             footnotes_part = FootnotesPart.default(self)
             self.relate_to(footnotes_part, RT.FOOTNOTES)
-            return  footnotes_part
+            return footnotes_part
 
 
 class Unmarshaller:

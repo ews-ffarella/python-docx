@@ -14,6 +14,7 @@ class Del(StoryChild):
     """
     A delRun object
     """
+
     def __init__(self, d, parent):
         super(Del, self).__init__(parent)
         self._d = self._element = self.element = d
@@ -36,7 +37,6 @@ class Del(StoryChild):
         return run
 
     def add_text(self, text):
-
         t = self._d.add_dt(text)
         return _Text(t)
 
@@ -54,13 +54,14 @@ class Del(StoryChild):
 
     @property
     def all_runs(self):
-        return [Run(r, self) for r in self._d.xpath('./w:r')]
+        return [Run(r, self) for r in self._d.xpath("./w:r")]
 
 
 class _Text(object):
     """
     Proxy object wrapping ``<w:delText>`` element.
     """
+
     def __init__(self, t_elm):
         super(_Text, self).__init__()
         self._dt = t_elm

@@ -6,9 +6,9 @@ from typing import TYPE_CHECKING, Callable, Iterator, List
 
 from docx.oxml.drawing import CT_Drawing
 from docx.oxml.ns import qn
+from docx.oxml.parser import OxmlElement
 from docx.oxml.simpletypes import ST_BrClear, ST_BrType
 from docx.oxml.text.font import CT_RPr
-from docx.oxml.parser import OxmlElement
 from docx.oxml.xmlchemy import BaseOxmlElement, OptionalAttribute, ZeroOrMore, ZeroOrOne
 from docx.shared import TextAccumulator
 
@@ -35,7 +35,7 @@ class CT_R(BaseOxmlElement):
     cr = ZeroOrMore("w:cr")
     drawing = ZeroOrMore("w:drawing")
     t = ZeroOrMore("w:t")
-    dt = ZeroOrOne('w:delText')
+    dt = ZeroOrOne("w:delText")
     tab = ZeroOrMore("w:tab")
 
     def add_t(self, text: str) -> CT_Text:
@@ -51,7 +51,7 @@ class CT_R(BaseOxmlElement):
         """
         dt = self._add_dt(text=text)
         if len(text.strip()) < len(text):
-            dt.set(qn('xml:space'), 'preserve')
+            dt.set(qn("xml:space"), "preserve")
         return dt
 
     def add_drawing(self, inline_or_anchor: CT_Inline | CT_Anchor) -> CT_Drawing:
@@ -87,7 +87,7 @@ class CT_R(BaseOxmlElement):
         <w:commentRangeStart w:id=_id/>
         <self run element>
         """
-        comm_start = OxmlElement('w:commentRangeStart')
+        comm_start = OxmlElement("w:commentRangeStart")
         comm_start._id = _id
         self.addprevious(comm_start)
 
@@ -103,7 +103,7 @@ class CT_R(BaseOxmlElement):
         comm_end = OxmlElement("w:commentRangeEnd")
         comm_end._id = _id
         self.addnext(comm_end)
-        reference = OxmlElement('w:commentReference')
+        reference = OxmlElement("w:commentReference")
         reference._id = _id
         ref_run_elem = OxmlElement("w:r")
         ref_run_elem.append(reference)
@@ -112,14 +112,14 @@ class CT_R(BaseOxmlElement):
     def add_footnote_reference(self, _id):
         rPr = self.get_or_add_rPr()
         rstyle = rPr.get_or_add_rStyle()
-        rstyle.val = 'FootnoteReference'
-        reference = OxmlElement('w:footnoteReference')
+        rstyle.val = "FootnoteReference"
+        reference = OxmlElement("w:footnoteReference")
         reference._id = _id
         self.append(reference)
         return reference
 
     def add_footnoteRef(self):
-        ref = OxmlElement('w:footnoteRef')
+        ref = OxmlElement("w:footnoteRef")
         self.append(ref)
 
         return ref
@@ -127,15 +127,15 @@ class CT_R(BaseOxmlElement):
     def footnote_style(self):
         rPr = self.get_or_add_rPr()
         rstyle = rPr.get_or_add_rStyle()
-        rstyle.val = 'FootnoteReference'
+        rstyle.val = "FootnoteReference"
 
         self.add_footnoteRef()
         return self
 
     @property
     def footnote_id(self):
-        _id = self.xpath('./w:footnoteReference/@w:id')
-        if len(_id) > 1 or len(_id) == 0 :
+        _id = self.xpath("./w:footnoteReference/@w:id")
+        if len(_id) > 1 or len(_id) == 0:
             return None
         else:
             return int(_id[0])
@@ -149,14 +149,14 @@ class CT_R(BaseOxmlElement):
             self.remove(child)
 
     def add_comment_reference(self, _id):
-        reference = OxmlElement('w:commentReference')
+        reference = OxmlElement("w:commentReference")
         reference._id = _id
         self.append(reference)
         return reference
 
-    def copy_rpr(self,rprCopy):
+    def copy_rpr(self, rprCopy):
         rPr = self.get_or_add_rPr()
-        if not rprCopy is None:
+        if rprCopy is not None:
             for p in rprCopy[:]:
                 rPr.append(p)
 
@@ -249,15 +249,15 @@ class CT_R(BaseOxmlElement):
         child elements like ``<w:tab/>`` translated to their Python
         equivalent.
         """
-        text = ''
+        text = ""
         for child in self:
-            if child.tag == qn('w:delText'):
+            if child.tag == qn("w:delText"):
                 t_text = child.text
-                text += t_text if t_text is not None else ''
-            elif child.tag == qn('w:tab'):
-                text += '\t'
-            elif child.tag in (qn('w:br'), qn('w:cr')):
-                text += '\n'
+                text += t_text if t_text is not None else ""
+            elif child.tag == qn("w:tab"):
+                text += "\t"
+            elif child.tag in (qn("w:br"), qn("w:cr")):
+                text += "\n"
         return text
 
     @deltext.setter
@@ -361,6 +361,8 @@ class CT_DelText(BaseOxmlElement):
     """
     ``<w:delText>`` element, containing a sequence of characters within a run
     """
+
+
 class _DelRunContentAppender(object):
     """
     Service object that knows how to translate a Python string into run
@@ -370,6 +372,7 @@ class _DelRunContentAppender(object):
     appended. Likewise a newline or carriage return character ('\n', '\r')
     causes a ``<w:cr>`` element to be appended.
     """
+
     def __init__(self, r):
         self._r = r
         self._bfr = []
@@ -401,20 +404,21 @@ class _DelRunContentAppender(object):
         which must be called at the end of text to ensure any pending
         ``<w:t>`` element is written.
         """
-        if char == '\t':
+        if char == "\t":
             self.flush()
             self._r.add_tab()
-        elif char in '\r\n':
+        elif char in "\r\n":
             self.flush()
             self._r.add_br()
         else:
             self._bfr.append(char)
 
     def flush(self):
-        text = ''.join(self._bfr)
+        text = "".join(self._bfr)
         if text:
             self._r.add_dt(text)
         del self._bfr[:]
+
 
 # ------------------------------------------------------------------------------------
 # Utility

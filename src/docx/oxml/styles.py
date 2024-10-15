@@ -31,9 +31,9 @@ def styleId_from_name(name):
 
 
 class CT_DocDefaults(BaseOxmlElement):
-    _tag_seq = ('w:rPrDefault', 'w:pPrDefault')
-    rPrDefault = ZeroOrOne('w:rPrDefault', successors=(_tag_seq[1:]))
-    pPrDefault = ZeroOrOne('w:pPrDefault', successors=())
+    _tag_seq = ("w:rPrDefault", "w:pPrDefault")
+    rPrDefault = ZeroOrOne("w:rPrDefault", successors=(_tag_seq[1:]))
+    pPrDefault = ZeroOrOne("w:pPrDefault", successors=())
 
     @property
     def rpr(self):
@@ -51,14 +51,15 @@ class CT_DocDefaults(BaseOxmlElement):
 
 
 class CT_RPrDefault(BaseOxmlElement):
-    rPr = ZeroOrOne('w:rPr', successors=())
+    rPr = ZeroOrOne("w:rPr", successors=())
 
     @property
     def rpr(self):
         return self.rPr
 
+
 class CT_PPrDefault(BaseOxmlElement):
-    pPr = ZeroOrOne('w:pPr', successors=())
+    pPr = ZeroOrOne("w:pPr", successors=())
 
     @property
     def ppr(self):

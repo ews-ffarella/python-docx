@@ -6,24 +6,21 @@ Run-related proxy objects for python-docx, Run in particular.
 
 from __future__ import absolute_import, print_function, unicode_literals
 
-from docx.text.run import Run
-from docx.styles.style import CharacterStyle
 from docx.shared import StoryChild
+from docx.styles.style import CharacterStyle
+from docx.text.run import Run
 
 
 class Ins(StoryChild):
     """
     An insRun object
     """
+
     def __init__(self, i, parent):
         super(Ins, self).__init__(parent)
         self._i = self._element = self.element = i
 
-    def add_run(
-            self,
-            text: str | None,
-            style: str | CharacterStyle | None = None
-    ) -> Run:
+    def add_run(self, text: str | None, style: str | CharacterStyle | None = None) -> Run:
         """
         Append a run to this w:ins containing `text` and having character
         style identified by style ID `style`. `text` can contain tab
@@ -58,13 +55,14 @@ class Ins(StoryChild):
 
     @property
     def all_runs(self):
-        return [Run(r, self) for r in self._i.xpath('.//w:r')]
+        return [Run(r, self) for r in self._i.xpath(".//w:r")]
 
 
 class _Text(object):
     """
     Proxy object wrapping ``<w:t>`` element.
     """
+
     def __init__(self, t_elm):
         super(_Text, self).__init__()
         self._dt = t_elm

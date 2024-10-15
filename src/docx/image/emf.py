@@ -2,16 +2,17 @@
 
 from __future__ import absolute_import, division, print_function
 
-from .constants import MIME_TYPE
-from .exceptions import InvalidImageStreamError
-from .helpers import BIG_ENDIAN, StreamReader
-from .image import BaseImageHeader
 import struct
+
+from .constants import MIME_TYPE
+from .image import BaseImageHeader
+
 
 class Emf(BaseImageHeader):
     """
     Image header parser for PNG images
     """
+
     @property
     def content_type(self):
         """
@@ -25,10 +26,10 @@ class Emf(BaseImageHeader):
         """
         Default filename extension, always 'png' for PNG images.
         """
-        return 'emf'
+        return "emf"
 
     @classmethod
-    def from_stream(cls, stream,filename=None):
+    def from_stream(cls, stream, filename=None):
         """
         Return a |Emf| instance having header properties parsed from image in
         *stream*.
@@ -54,17 +55,17 @@ class Emf(BaseImageHeader):
         stream.seek(0)
         x = stream.read(40)
         stream.seek(0)
-        iType,nSize = struct.unpack("ii",x[0:8])
-        rclBounds = struct.unpack("iiii",x[8:24])
-        rclFrame = struct.unpack("iiii",x[24:40])
+        iType, nSize = struct.unpack("ii", x[0:8])
+        rclBounds = struct.unpack("iiii", x[8:24])
+        rclFrame = struct.unpack("iiii", x[24:40])
 
         dpi = 300
         horz_dpi = dpi
         vert_dpi = dpi
-        mmwidth = (rclFrame[2]-rclFrame[0])/100.0
-        mmheight = (rclFrame[3]-rclFrame[1])/100.0
-        px_width = int(mmwidth*dpi*0.03937008)
-        px_height = int(mmheight*dpi*0.03937008)
+        mmwidth = (rclFrame[2] - rclFrame[0]) / 100.0
+        mmheight = (rclFrame[3] - rclFrame[1]) / 100.0
+        px_width = int(mmwidth * dpi * 0.03937008)
+        px_height = int(mmheight * dpi * 0.03937008)
 
-        #1 dot/inch  =  0.03937008 pixel/millimeter
-        return cls(px_width,px_height,horz_dpi,vert_dpi)
+        # 1 dot/inch  =  0.03937008 pixel/millimeter
+        return cls(px_width, px_height, horz_dpi, vert_dpi)

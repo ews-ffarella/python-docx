@@ -4,17 +4,15 @@
 Custom properties part, corresponds to ``/docProps/custom.xml`` part in package.
 """
 
-from __future__ import (
-    absolute_import, division, print_function, unicode_literals
-)
+from __future__ import absolute_import, division, print_function, unicode_literals
 
 from lxml import etree
 
 from docx.opc.constants import CONTENT_TYPE as CT
 from docx.opc.customprops import CustomProperties
-from docx.oxml.customprops import CT_CustomProperties
 from docx.opc.packuri import PackURI
 from docx.opc.part import XmlPart
+from docx.oxml.customprops import CT_CustomProperties
 
 # configure XML parser
 parser_lookup = etree.ElementDefaultClassLookup(element=CT_CustomProperties)
@@ -38,6 +36,7 @@ class CustomPropertiesPart(XmlPart):
     Corresponds to part named ``/docProps/custom.xml``, containing the custom
     document properties for this document package.
     """
+
     @classmethod
     def default(cls, package):
         """
@@ -62,9 +61,7 @@ class CustomPropertiesPart(XmlPart):
 
     @classmethod
     def _new(cls, package):
-        partname = PackURI('/docProps/custom.xml')
+        partname = PackURI("/docProps/custom.xml")
         content_type = CT.OPC_CUSTOM_PROPERTIES
         customProperties = CT_CustomProperties.new()
-        return CustomPropertiesPart(
-            partname, content_type, customProperties, package
-        )
+        return CustomPropertiesPart(partname, content_type, customProperties, package)

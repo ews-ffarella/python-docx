@@ -7,13 +7,13 @@ from typing import IO, TYPE_CHECKING, cast
 from docx.document import Document
 from docx.enum.style import WD_STYLE_TYPE
 from docx.opc.constants import RELATIONSHIP_TYPE as RT
+from docx.parts.comments import CommentsPart
+from docx.parts.footnotes import FootnotesPart
 from docx.parts.hdrftr import FooterPart, HeaderPart
 from docx.parts.numbering import NumberingPart
 from docx.parts.settings import SettingsPart
 from docx.parts.story import StoryPart
 from docx.parts.styles import StylesPart
-from docx.parts.comments import CommentsPart
-from docx.parts.footnotes import FootnotesPart
 from docx.shape import InlineShapes
 from docx.shared import lazyproperty
 
@@ -157,7 +157,7 @@ class DocumentPart(StoryPart):
             styles_part = StylesPart.default(package)
             self.relate_to(styles_part, RT.STYLES)
             return styles_part
-    
+
     @lazyproperty
     def comments_part(self):
         """
@@ -171,10 +171,10 @@ class DocumentPart(StoryPart):
         try:
             return self.part_related_by(RT.COMMENTS)
         except KeyError:
-            comments_part = CommentsPart.default(self) 
+            comments_part = CommentsPart.default(self)
             self.relate_to(comments_part, RT.COMMENTS)
             return comments_part
-    
+
     @property
     def _footnotes_part(self):
         """

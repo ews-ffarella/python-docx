@@ -4,20 +4,22 @@
 Support reading and writing custom properties to and from a .docx file.
 """
 
-from __future__ import (
-    absolute_import, division, print_function, unicode_literals
-)
+from __future__ import absolute_import, division, print_function, unicode_literals
 
 import numbers
+
 from lxml import etree
+
 from docx.oxml.ns import nspfxmap, qn
+from collections import UserDict
 
 
-class CustomProperties(object):
+class CustomProperties(UserDict):
     """
     Corresponds to part named ``/docProps/custom.xml``, containing the custom
     document properties for this document package.
     """
+
     def __init__(self, element):
         self._element = element
 
@@ -31,20 +33,20 @@ class CustomProperties(object):
                 except ValueError:
                     return elm.text
             elif elm.tag == qn("vt:bool"):
-                return True if elm.text == '1' else False
+                return True if elm.text == "1" else False
             return elm.text
 
     def __setitem__(self, key, value):
         prop = self.lookup(key)
         if prop is None:
-            elm_type = 'lpwstr'
+            elm_type = "lpwstr"
             if isinstance(value, bool):
-                elm_type = 'bool'
+                elm_type = "bool"
                 value = str(1 if value else 0)
             elif isinstance(value, numbers.Number):
-                elm_type = 'i4'
+                elm_type = "i4"
                 value = str(int(value))
-            prop = etree.SubElement(self._element, qn("op:property"), nsmap=nspfxmap("op"))
+            prop = etree.SubElement(self._element, qn("op:property"))
             elm = etree.SubElement(prop, qn(f"vt:{elm_type}"), nsmap=nspfxmap("vt"))
             elm.text = value
             prop.set("name", key)

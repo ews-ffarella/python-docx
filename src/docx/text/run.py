@@ -2,21 +2,21 @@
 
 from __future__ import annotations
 
-from typing import IO, TYPE_CHECKING, Iterator, cast
 from datetime import datetime
+from typing import IO, TYPE_CHECKING, Iterator, cast
 
 from docx.drawing import Drawing
 from docx.enum.style import WD_STYLE_TYPE
 from docx.enum.text import WD_BREAK
 from docx.oxml.drawing import CT_Drawing
-from docx.oxml.text.pagebreak import CT_LastRenderedPageBreak
 from docx.oxml.ns import qn
+from docx.oxml.text.pagebreak import CT_LastRenderedPageBreak
 from docx.shape import InlineShape
 from docx.shared import StoryChild
 from docx.styles.style import CharacterStyle
+from docx.text.comment import Comment
 from docx.text.font import Font
 from docx.text.pagebreak import RenderedPageBreak
-from docx.text.comment import Comment
 
 if TYPE_CHECKING:
     import docx.types as t
@@ -112,8 +112,7 @@ class Run(StoryChild):
         comment_part = self.part._comments_part.element
         if dtime is None:
             dtime = str(datetime.now()).replace(" ", "T")
-        comment =  self._r.add_comment(author, comment_part, initials, dtime,
-                                       text)
+        comment = self._r.add_comment(author, comment_part, initials, dtime, text)
 
     @property
     def bold(self) -> bool | None:
@@ -286,7 +285,7 @@ class Run(StoryChild):
     @property
     def is_hyperlink(self):
         """checks if the run is nested inside a hyperlink element"""
-        return self.element.getparent().tag.split('}')[1] == 'hyperlink'
+        return self.element.getparent().tag.split("}")[1] == "hyperlink"
 
     @property
     def comments(self):
@@ -307,6 +306,7 @@ class _Text:
 
 class _DelText(object):
     """Proxy object wrapping `<w:delText>` element."""
+
     def __init__(self, t_elm):
         super(_DelText, self).__init__()
         self._dt = t_elm
@@ -316,8 +316,8 @@ class _DelText(object):
         returns the text of the hyperlink of the run in case of the run has a hyperlink
         """
         document = self._parent._parent.document
-        parent   = self.element.getparent()
-        linkText = ''
+        parent = self.element.getparent()
+        linkText = ""
         if self.is_hyperlink:
             if parent.attrib.__contains__(qn("r:id")):
                 rId = parent.get(qn("r:id"))
@@ -331,4 +331,4 @@ class _DelText(object):
                 print(self.text)
                 return "", False
         else:
-            return 'None'
+            return "None"

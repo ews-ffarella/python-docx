@@ -2,19 +2,19 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Iterator, List, cast
 from datetime import datetime
+from typing import TYPE_CHECKING, Iterator, List, cast
 
 from docx.enum.style import WD_STYLE_TYPE
 from docx.oxml.text.run import CT_R
 from docx.shared import StoryChild
 from docx.styles.style import ParagraphStyle
+from docx.text.delrun import Del
 from docx.text.hyperlink import Hyperlink
+from docx.text.insrun import Ins
 from docx.text.pagebreak import RenderedPageBreak
 from docx.text.parfmt import ParagraphFormat
 from docx.text.run import Run
-from docx.text.delrun import Del
-from docx.text.insrun import Ins
 
 if TYPE_CHECKING:
     import docx.types as t
@@ -46,11 +46,7 @@ class Paragraph(StoryChild):
             run.style = style
         return run
 
-    def add_ins(
-            self,
-            text: str | None = None,
-            style: str | CharacterStyle | None = None
-    ) -> Ins:
+    def add_ins(self, text: str | None = None, style: str | CharacterStyle | None = None) -> Ins:
         i = self._p.add_i()
 
         irun = Ins(i, self)
@@ -62,10 +58,7 @@ class Paragraph(StoryChild):
 
         return irun
 
-    def add_del(
-            self, deltext=None
-    ) -> Del:
-
+    def add_del(self, deltext=None) -> Del:
         d = self._p.add_d()
 
         drun = Del(d, self)
@@ -81,13 +74,23 @@ class Paragraph(StoryChild):
         self._p.getparent().remove(self._p)
         self._p = self._element = None
 
-    def add_comment(self, text, author='python-docx', initials='pd', dtime=None, rangeStart=0, rangeEnd=0,
-                    comment_part=None):
+    def add_comment(
+        self,
+        text,
+        author="python-docx",
+        initials="pd",
+        dtime=None,
+        rangeStart=0,
+        rangeEnd=0,
+        comment_part=None,
+    ):
         if comment_part is None:
             comment_part = self.part._comments_part.element
         if dtime is None:
-            dtime = str(datetime.now()).replace(' ', 'T')
-        comment = self._p.add_comm(author, comment_part, initials, dtime, text, rangeStart, rangeEnd)
+            dtime = str(datetime.now()).replace(" ", "T")
+        comment = self._p.add_comm(
+            author, comment_part, initials, dtime, text, rangeStart, rangeEnd
+        )
 
         return comment
 
@@ -102,7 +105,7 @@ class Paragraph(StoryChild):
         self.append_runs(r_lst)
 
     def append_runs(self, runs):
-        self.add_run(' ')
+        self.add_run(" ")
         for run in runs:
             self._p.append(run._r)
 
@@ -206,7 +209,7 @@ class Paragraph(StoryChild):
 
     @property
     def all_runs(self):
-        return [Run(r, self) for r in self._p.xpath('.//w:r[not(ancestor::w:r)]')]
+        return [Run(r, self) for r in self._p.xpath(".//w:r[not(ancestor::w:r)]")]
 
     @property
     def ins(self) -> List[Ins]:
@@ -259,22 +262,22 @@ class Paragraph(StoryChild):
 
     @property
     def header_level(self):
-        '''
+        """
         input Paragraph Object
         output Paragraph level in case of header or returns None
-        '''
+        """
         headerPattern = re.compile(".*Heading (\d+)$")
         level = 0
         if headerPattern.match(self.style.name):
-            level = int(self.style.name.lower().split('heading')[-1].strip())
+            level = int(self.style.name.lower().split("heading")[-1].strip())
         return level
 
     @property
     def NumId(self):
-        '''
+        """
         returns NumId val in case of paragraph has numbering
         else: return None
-        '''
+        """
         try:
             return self._p.pPr.numPr.numId.val
         except:
@@ -282,10 +285,10 @@ class Paragraph(StoryChild):
 
     @property
     def list_lvl(self):
-        '''
+        """
         returns ilvl val in case of paragraph has a numbering level
         else: return None
-        '''
+        """
         try:
             return self._p.pPr.numPr.ilvl.val
         except:
@@ -293,9 +296,9 @@ class Paragraph(StoryChild):
 
     @property
     def list_info(self):
-        '''
+        """
         returns tuple (has numbering info, numId value, ilvl value)
-        '''
+        """
         if self.NumId and self.list_lvl:
             return True, self.NumId, self.list_lvl
         else:
@@ -307,7 +310,7 @@ class Paragraph(StoryChild):
 
     @property
     def full_text(self):
-        return u"".join([r.text for r in self.all_runs])
+        return "".join([r.text for r in self.all_runs])
 
     @property
     def footnotes(self):

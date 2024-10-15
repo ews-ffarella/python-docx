@@ -41,6 +41,7 @@ class CT_AbstractNum(BaseOxmlElement):
     """
     ``<w:abstractNum>`` element, which represents an abstract numbering definition that defines most of the formatting details.
     """
+
     abstractNumId = RequiredAttribute("w:abstractNumId", ST_DecimalNumber)
 
 
