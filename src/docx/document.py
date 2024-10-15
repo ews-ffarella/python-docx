@@ -10,6 +10,7 @@ from typing import IO, TYPE_CHECKING, Iterator, List
 from docx.blkcntnr import BlockItemContainer
 from docx.enum.section import WD_SECTION
 from docx.enum.text import WD_BREAK
+from docx.oxml.ns import qn
 from docx.section import Section, Sections
 from docx.shared import ElementProxy, Emu
 
@@ -31,11 +32,13 @@ class Document(ElementProxy):
     a document.
     """
 
-    def __init__(self, element: CT_Document, part: DocumentPart):
+    def __init__(self, element: CT_Document, part: DocumentPart, fudge_markers: bool = False):
         super(Document, self).__init__(element)
         self._element = element
         self._part = part
         self.__body = None
+        if fudge_markers:
+            self.fudge_list_markers()
 
     def add_heading(self, text: str = "", level: int = 1):
         """Return a heading paragraph newly added to the end of the document.
@@ -107,10 +110,109 @@ class Document(ElementProxy):
         table.style = style
         return table
 
+    def fudge_list_markers(self):
+        """
+        Create fake list markers and overwrite paragraphs with list markers
+        that are list markers.
+        """
+
+        # dig up id of enumeration and indentation level for each paragraph
+        # (iff relevant)
+        paras_numPr = [p._element.xpath(".//w:numPr") for p in self.paragraphs]
+        try:
+            get = lambda pth, x: x.xpath(pth)[0].attrib.values()[0]
+            para_num_groups = [
+                (get(".//w:numId", p[0]), get(".//w:ilvl", p[0])) if p else None
+                for p in paras_numPr
+            ]
+        except:
+            # Abort silently.
+            # self.fudge_status = "Aborted at search for numIds."
+            return
+
+        # Generate a surface representation of each enumeration, at each
+        # point in that enumeration.
+        enumerations = {}
+        para_nums = []
+        for g in para_num_groups:
+            if g is None:
+                para_nums.append(None)
+                continue
+
+            # retain the enumeration for future groups
+            if g in enumerations:
+                enumerations[g] += 1
+            else:
+                enumerations[g] = 1
+
+            # TODO: integrate enumeration types (digital, alpha, roman, etc.)
+            # from style file
+            para_nums.append(enumerations[g])
+
+        # print zip(paras_numPr,para_num_groups,para_nums)
+
+        # self.fudge_freq += len([n for n in para_nums if n is not None])
+
+        # Overwrite the existing representation of the text in
+        for par, num in zip(self.paragraphs, para_nums):
+            if num is None:
+                continue
+            # print(num, par.text)
+            par.text = " ".join([num + ")", "" if par.text is None else par.text])
+
+    def add_comment(self, start_run, end_run, author, dtime, comment_text, initials=None):
+        """Add comment spanning over one or more runs.
+
+        Args:
+            start_run: |CT_Run| instance, first run in comment
+            author: (str) Comment author
+            end_run: |CT_Run| instance, last run in comment.
+            dtime: (str) Date and Time of comment, use
+                str(datetime.datetime.now())
+            comment_text: (str) Text body of comment
+            initials: (str) Comment author initials. If None, determined with a
+                heuristic from `author` variable
+        Returns:
+            Comment object
+        """
+        if initials is None:
+            # Upper: use upper-case chars to determine initials
+            # 'BlackBoiler' --> 'BB'
+            # 'Ryan Mannion' --> 'RM'
+            # 'ryan mannion' --> ''
+            def upper(n):
+                return "".join([c for c in n if c.isupper()])
+
+            # Splitter: split name and use first chars to determine initials
+            # ryan mannion --> RM
+            # ryan --> R
+            def splitter(n):
+                return "".join([t[0] for t in n.split(" ")]).upper()
+
+            initials = upper(author)
+            if initials == "":
+                initials = splitter(author)
+
+        comment_part_element = self.comments_part.element
+        comment = comment_part_element.add_comment(author, initials, dtime)
+        comment._add_p(comment_text)
+        start_run.mark_comment_start(comment._id)
+        end_run.mark_comment_end(comment._id)
+
+        return comment
+
     @property
     def core_properties(self):
         """A |CoreProperties| object providing Dublin Core properties of document."""
         return self._part.core_properties
+
+    @property
+    def custom_properties(self):
+        """
+        A |CustomProperties| object providing read/write access to the custom
+        properties of this document.
+        """
+        return self._part.custom_properties
 
     @property
     def inline_shapes(self):
@@ -139,6 +241,14 @@ class Document(ElementProxy):
     def part(self) -> DocumentPart:
         """The |DocumentPart| object of this document."""
         return self._part
+
+    @property
+    def comments_part(self):
+        """
+        A |Comments| object providing read/write access to the core
+        properties of this document.
+        """
+        return self.part.comments_part
 
     def save(self, path_or_stream: str | IO[bytes]):
         """Save this document to `path_or_stream`.
@@ -173,6 +283,23 @@ class Document(ElementProxy):
         list.
         """
         return self._body.tables
+
+    @property
+    def elements(self):
+        return self._body.elements
+
+    @property
+    def abstractNumIds(self):
+        """
+        Returns list of all the 'w:abstarctNumId' of this document
+        """
+        return self._body.abstractNumIds
+
+    @property
+    def last_abs_num(self):
+        last = self.abstractNumIds[-1]
+        val = last.attrib.get(qn("w:abstractNumId"))
+        return last, val
 
     @property
     def _block_width(self) -> Length:

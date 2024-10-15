@@ -8,9 +8,12 @@ from docx.opc.constants import RELATIONSHIP_TYPE as RT
 from docx.opc.packuri import PACKAGE_URI, PackURI
 from docx.opc.part import PartFactory
 from docx.opc.parts.coreprops import CorePropertiesPart
+from docx.opc.parts.customprops import CustomPropertiesPart
 from docx.opc.pkgreader import PackageReader
 from docx.opc.pkgwriter import PackageWriter
 from docx.opc.rel import Relationships
+from docx.parts.comments import CommentsPart
+from docx.parts.footnotes import FootnotesPart
 from docx.shared import lazyproperty
 
 if TYPE_CHECKING:
@@ -43,6 +46,14 @@ class OpcPackage:
         """|CoreProperties| object providing read/write access to the Dublin Core
         properties for this document."""
         return self._core_properties_part.core_properties
+
+    @property
+    def custom_properties(self):
+        """
+        |CustomProperties| object providing read/write access to the
+        custom properties for this document.
+        """
+        return self._custom_properties_part.custom_properties
 
     def iter_rels(self) -> Iterator[_Relationship]:
         """Generate exactly one reference to each relationship in the package by
@@ -178,6 +189,45 @@ class OpcPackage:
             core_properties_part = CorePropertiesPart.default(self)
             self.relate_to(core_properties_part, RT.CORE_PROPERTIES)
             return core_properties_part
+
+    @property
+    def _comments_part(self):
+        """
+        |CommentsPart| object related to this package. Creates
+        a default Comments part if one is not present.
+        """
+        try:
+            return self.part_related_by(RT.COMMENTS)
+        except KeyError:
+            comments_part = CommentsPart.default(self)
+            self.relate_to(comments_part, RT.COMMENTS)
+            return comments_part
+
+    @property
+    def _custom_properties_part(self):
+        """
+        |CustomPropertiesPart| object related to this package. Creates
+        a default custom properties part if one is not present (not common).
+        """
+        try:
+            return self.part_related_by(RT.CUSTOM_PROPERTIES)
+        except KeyError:
+            custom_properties_part = CustomPropertiesPart.default(self)
+            self.relate_to(custom_properties_part, RT.CUSTOM_PROPERTIES)
+            return custom_properties_part
+
+    @property
+    def _footnotes_part(self):
+        """
+        |FootnotesPart| object related to this package. Creates
+        a default Comments part if one is not present.
+        """
+        try:
+            return self.part_related_by(RT.FOOTNOTES)
+        except KeyError:
+            footnotes_part = FootnotesPart.default(self)
+            self.relate_to(footnotes_part, RT.FOOTNOTES)
+            return footnotes_part
 
 
 class Unmarshaller:

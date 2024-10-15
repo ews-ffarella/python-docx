@@ -37,6 +37,14 @@ class CT_Num(BaseOxmlElement):
         return num
 
 
+class CT_AbstractNum(BaseOxmlElement):
+    """
+    ``<w:abstractNum>`` element, which represents an abstract numbering definition that defines most of the formatting details.
+    """
+
+    abstractNumId = RequiredAttribute("w:abstractNumId", ST_DecimalNumber)
+
+
 class CT_NumLvl(BaseOxmlElement):
     """``<w:lvlOverride>`` element, which identifies a level in a list definition to
     override with settings it contains."""

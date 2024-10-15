@@ -7,6 +7,8 @@ from typing import IO, TYPE_CHECKING, cast
 from docx.document import Document
 from docx.enum.style import WD_STYLE_TYPE
 from docx.opc.constants import RELATIONSHIP_TYPE as RT
+from docx.parts.comments import CommentsPart
+from docx.parts.footnotes import FootnotesPart
 from docx.parts.hdrftr import FooterPart, HeaderPart
 from docx.parts.numbering import NumberingPart
 from docx.parts.settings import SettingsPart
@@ -47,6 +49,14 @@ class DocumentPart(StoryPart):
         """A |CoreProperties| object providing read/write access to the core properties
         of this document."""
         return self.package.core_properties
+
+    @property
+    def custom_properties(self):
+        """
+        A |CustomProperties| object providing read/write access to the custom
+        properties of this document.
+        """
+        return self.package.custom_properties
 
     @property
     def document(self):
@@ -147,3 +157,33 @@ class DocumentPart(StoryPart):
             styles_part = StylesPart.default(package)
             self.relate_to(styles_part, RT.STYLES)
             return styles_part
+
+    @lazyproperty
+    def comments_part(self):
+        """
+        A |Comments| object providing read/write access to the core
+        properties of this document.
+        """
+        return self._comments_part
+
+    @property
+    def _comments_part(self):
+        try:
+            return self.part_related_by(RT.COMMENTS)
+        except KeyError:
+            comments_part = CommentsPart.default(self)
+            self.relate_to(comments_part, RT.COMMENTS)
+            return comments_part
+
+    @property
+    def _footnotes_part(self):
+        """
+        |FootnotesPart| object related to this package. Creates
+        a default Comments part if one is not present.
+        """
+        try:
+            return self.part_related_by(RT.FOOTNOTES)
+        except KeyError:
+            footnotes_part = FootnotesPart.default(self)
+            self.relate_to(footnotes_part, RT.FOOTNOTES)
+            return footnotes_part

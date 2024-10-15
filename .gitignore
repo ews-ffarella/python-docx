@@ -1,6 +1,6 @@
+.venv
 /build/
 .coverage
-/dist/
 /docs/.build/
 /src/*.egg-info
 *.pyc

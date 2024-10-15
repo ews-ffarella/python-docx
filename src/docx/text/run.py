@@ -2,16 +2,19 @@
 
 from __future__ import annotations
 
+from datetime import datetime
 from typing import IO, TYPE_CHECKING, Iterator, cast
 
 from docx.drawing import Drawing
 from docx.enum.style import WD_STYLE_TYPE
 from docx.enum.text import WD_BREAK
 from docx.oxml.drawing import CT_Drawing
+from docx.oxml.ns import qn
 from docx.oxml.text.pagebreak import CT_LastRenderedPageBreak
 from docx.shape import InlineShape
 from docx.shared import StoryChild
 from docx.styles.style import CharacterStyle
+from docx.text.comment import Comment
 from docx.text.font import Font
 from docx.text.pagebreak import RenderedPageBreak
 
@@ -94,6 +97,22 @@ class Run(StoryChild):
         """
         t = self._r.add_t(text)
         return _Text(t)
+
+    def add_deltext(self, text: str):
+        """
+        Returns a newly appended |_DelText| object (corresponding to a new
+        ``<w:delText>`` child element) to the run, containing *text*. Compare with
+        the possibly more friendly approach of assigning text to the
+        :attr:`Run.deltext` property.
+        """
+        t = self._r.add_dt(text)
+        return _DelText(t)
+
+    def add_comment(self, text, author="python-docx", initials="pd", dtime=None):
+        comment_part = self.part._comments_part.element
+        if dtime is None:
+            dtime = str(datetime.now()).replace(" ", "T")
+        comment = self._r.add_comment(author, comment_part, initials, dtime, text)
 
     @property
     def bold(self) -> bool | None:
@@ -213,6 +232,14 @@ class Run(StoryChild):
         self._r.text = text
 
     @property
+    def deltext(self) -> str:
+        return self._r.deltext
+
+    @deltext.setter
+    def deltext(self, text: str) -> None:
+        self._r.deltext = text
+
+    @property
     def underline(self) -> bool | WD_UNDERLINE | None:
         """The underline style for this |Run|.
 
@@ -236,6 +263,38 @@ class Run(StoryChild):
     def underline(self, value: bool):
         self.font.underline = value
 
+    @property
+    def footnote(self):
+        _id = self._r.footnote_id
+
+        if _id is not None:
+            footnotes_part = self._parent._parent.part._footnotes_part.element
+            footnote = footnotes_part.get_footnote_by_id(_id)
+            return footnote.paragraph.text
+        else:
+            return None
+
+    @property
+    def rpr(self):
+        return self._r.rpr
+
+    @rpr.setter
+    def rpr(self, value):
+        self._r.rpr = value
+
+    @property
+    def is_hyperlink(self):
+        """checks if the run is nested inside a hyperlink element"""
+        return self.element.getparent().tag.split("}")[1] == "hyperlink"
+
+    @property
+    def comments(self):
+        comment_part = self._parent._parent.part._comments_part.element
+        comment_refs = self._element.findall(qn("w:commentReference"))
+        ids = [int(ref.get(qn("w:id"))) for ref in comment_refs]
+        coms = [com for com in comment_part if com._id in ids]
+        return [Comment(com, comment_part) for com in coms]
+
 
 class _Text:
     """Proxy object wrapping `<w:t>` element."""
@@ -243,3 +302,33 @@ class _Text:
     def __init__(self, t_elm: CT_Text):
         super(_Text, self).__init__()
         self._t = t_elm
+
+
+class _DelText(object):
+    """Proxy object wrapping `<w:delText>` element."""
+
+    def __init__(self, t_elm):
+        super(_DelText, self).__init__()
+        self._dt = t_elm
+
+    def get_hyperLink(self):
+        """
+        returns the text of the hyperlink of the run in case of the run has a hyperlink
+        """
+        document = self._parent._parent.document
+        parent = self.element.getparent()
+        linkText = ""
+        if self.is_hyperlink:
+            if parent.attrib.__contains__(qn("r:id")):
+                rId = parent.get(qn("r:id"))
+                linkText = document._part._rels[rId].target_ref
+                return linkText, True
+            elif parent.attrib.__contains__(qn("w:anchor")):
+                linkText = parent.get(qn("w:anchor"))
+                return linkText, False
+            else:
+                print("No Link in Hyperlink!")
+                print(self.text)
+                return "", False
+        else:
+            return "None"

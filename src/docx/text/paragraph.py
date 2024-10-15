@@ -2,13 +2,16 @@
 
 from __future__ import annotations
 
+from datetime import datetime
 from typing import TYPE_CHECKING, Iterator, List, cast
 
 from docx.enum.style import WD_STYLE_TYPE
 from docx.oxml.text.run import CT_R
 from docx.shared import StoryChild
 from docx.styles.style import ParagraphStyle
+from docx.text.delrun import Del
 from docx.text.hyperlink import Hyperlink
+from docx.text.insrun import Ins
 from docx.text.pagebreak import RenderedPageBreak
 from docx.text.parfmt import ParagraphFormat
 from docx.text.run import Run
@@ -25,7 +28,7 @@ class Paragraph(StoryChild):
 
     def __init__(self, p: CT_P, parent: t.ProvidesStoryPart):
         super(Paragraph, self).__init__(parent)
-        self._p = self._element = p
+        self._p = self._element = self.element = p
 
     def add_run(self, text: str | None = None, style: str | CharacterStyle | None = None) -> Run:
         """Append run containing `text` and having character-style `style`.
@@ -42,6 +45,69 @@ class Paragraph(StoryChild):
         if style:
             run.style = style
         return run
+
+    def add_ins(self, text: str | None = None, style: str | CharacterStyle | None = None) -> Ins:
+        i = self._p.add_i()
+
+        irun = Ins(i, self)
+        run = None
+        if text:
+            run = irun.add_run(text)
+        if run is not None and style is not None:
+            run.style = style
+
+        return irun
+
+    def add_del(self, deltext=None) -> Del:
+        d = self._p.add_d()
+
+        drun = Del(d, self)
+        if deltext:
+            drun.add_text(deltext)
+
+        return drun
+
+    def delete(self):
+        """
+        delete the content of the paragraph
+        """
+        self._p.getparent().remove(self._p)
+        self._p = self._element = None
+
+    def add_comment(
+        self,
+        text,
+        author="python-docx",
+        initials="pd",
+        dtime=None,
+        rangeStart=0,
+        rangeEnd=0,
+        comment_part=None,
+    ):
+        if comment_part is None:
+            comment_part = self.part._comments_part.element
+        if dtime is None:
+            dtime = str(datetime.now()).replace(" ", "T")
+        comment = self._p.add_comm(
+            author, comment_part, initials, dtime, text, rangeStart, rangeEnd
+        )
+
+        return comment
+
+    def add_footnote(self, text):
+        footnotes_part = self.part._footnotes_part.element
+        footnote = self._p.add_fn(text, footnotes_part)
+
+        return footnote
+
+    def merge_paragraph(self, otherParagraph):
+        r_lst = otherParagraph.runs
+        self.append_runs(r_lst)
+
+    def append_runs(self, runs):
+        self.add_run(" ")
+        for run in runs:
+            self._p.append(run._r)
 
     @property
     def alignment(self) -> WD_PARAGRAPH_ALIGNMENT | None:
@@ -91,6 +157,20 @@ class Paragraph(StoryChild):
             paragraph.style = style
         return paragraph
 
+    def insert_paragraph_after(self, text=None, style=None):
+        """
+        Return a newly created paragraph, inserted directly before this
+        paragraph. If *text* is supplied, the new paragraph contains that
+        text in a single run. If *style* is provided, that style is assigned
+        to the new paragraph.
+        """
+        paragraph = self._insert_paragraph_after()
+        if text:
+            paragraph.add_run(text)
+        if style is not None:
+            paragraph.style = style
+        return paragraph
+
     def iter_inner_content(self) -> Iterator[Run | Hyperlink]:
         """Generate the runs and hyperlinks in this paragraph, in the order they appear.
 
@@ -128,6 +208,24 @@ class Paragraph(StoryChild):
         return [Run(r, self) for r in self._p.r_lst]
 
     @property
+    def all_runs(self):
+        return [Run(r, self) for r in self._p.xpath(".//w:r[not(ancestor::w:r)]")]
+
+    @property
+    def ins(self) -> List[Ins]:
+        """
+        Sequence of |Ins| instances corresponding to the <w:ins> elements in this paragraph
+        """
+        return [Ins(i, self) for i in self._p.i_lst]
+
+    @property
+    def dels(self) -> List[Del]:
+        """
+        Sequence of |Del| instances corresponding to the <w:del> elements in this paragraph
+        """
+        return [Del(d, self) for d in self._p.d_lst]
+
+    @property
     def style(self) -> ParagraphStyle | None:
         """Read/Write.
 
@@ -162,6 +260,70 @@ class Paragraph(StoryChild):
         """
         return self._p.text
 
+    @property
+    def header_level(self):
+        """
+        input Paragraph Object
+        output Paragraph level in case of header or returns None
+        """
+        headerPattern = re.compile(".*Heading (\d+)$")
+        level = 0
+        if headerPattern.match(self.style.name):
+            level = int(self.style.name.lower().split("heading")[-1].strip())
+        return level
+
+    @property
+    def NumId(self):
+        """
+        returns NumId val in case of paragraph has numbering
+        else: return None
+        """
+        try:
+            return self._p.pPr.numPr.numId.val
+        except:
+            return None
+
+    @property
+    def list_lvl(self):
+        """
+        returns ilvl val in case of paragraph has a numbering level
+        else: return None
+        """
+        try:
+            return self._p.pPr.numPr.ilvl.val
+        except:
+            return None
+
+    @property
+    def list_info(self):
+        """
+        returns tuple (has numbering info, numId value, ilvl value)
+        """
+        if self.NumId and self.list_lvl:
+            return True, self.NumId, self.list_lvl
+        else:
+            return False, 0, 0
+
+    @property
+    def is_heading(self):
+        return True if self.header_level else False
+
+    @property
+    def full_text(self):
+        return "".join([r.text for r in self.all_runs])
+
+    @property
+    def footnotes(self):
+        if self._p.footnote_ids is not None:
+            return True
+        else:
+            return False
+
+    @property
+    def comments(self):
+        runs_comments = [run.comments for run in self.all_runs]
+        return [comment for comments in runs_comments for comment in comments]
+
     @text.setter
     def text(self, text: str | None):
         self.clear()
@@ -170,4 +332,12 @@ class Paragraph(StoryChild):
     def _insert_paragraph_before(self):
         """Return a newly created paragraph, inserted directly before this paragraph."""
         p = self._p.add_p_before()
+        return Paragraph(p, self._parent)
+
+    def _insert_paragraph_after(self):
+        """
+        Return a newly created paragraph, inserted directly before this
+        paragraph.
+        """
+        p = self._p.add_p_after()
         return Paragraph(p, self._parent)

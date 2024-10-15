@@ -13,7 +13,7 @@ from docx.api import Document
 if TYPE_CHECKING:
     from docx.opc.part import Part
 
-__version__ = "1.1.2"
+__version__ = "1.0.1"
 
 
 __all__ = ["Document"]
@@ -25,7 +25,10 @@ from docx.opc.constants import CONTENT_TYPE as CT
 from docx.opc.constants import RELATIONSHIP_TYPE as RT
 from docx.opc.part import PartFactory
 from docx.opc.parts.coreprops import CorePropertiesPart
+from docx.opc.parts.customprops import CustomPropertiesPart
+from docx.parts.comments import CommentsPart
 from docx.parts.document import DocumentPart
+from docx.parts.footnotes import FootnotesPart
 from docx.parts.hdrftr import FooterPart, HeaderPart
 from docx.parts.image import ImagePart
 from docx.parts.numbering import NumberingPart
@@ -40,13 +43,16 @@ def part_class_selector(content_type: str, reltype: str) -> Type[Part] | None:
 
 
 PartFactory.part_class_selector = part_class_selector
+PartFactory.part_type_for[CT.WML_COMMENTS] = CommentsPart
 PartFactory.part_type_for[CT.OPC_CORE_PROPERTIES] = CorePropertiesPart
+PartFactory.part_type_for[CT.OPC_CUSTOM_PROPERTIES] = CustomPropertiesPart
 PartFactory.part_type_for[CT.WML_DOCUMENT_MAIN] = DocumentPart
 PartFactory.part_type_for[CT.WML_FOOTER] = FooterPart
 PartFactory.part_type_for[CT.WML_HEADER] = HeaderPart
 PartFactory.part_type_for[CT.WML_NUMBERING] = NumberingPart
 PartFactory.part_type_for[CT.WML_SETTINGS] = SettingsPart
 PartFactory.part_type_for[CT.WML_STYLES] = StylesPart
+PartFactory.part_type_for[CT.WML_FOOTNOTES] = FootnotesPart
 
 del (
     CT,
@@ -54,6 +60,8 @@ del (
     DocumentPart,
     FooterPart,
     HeaderPart,
+    FootnotesPart,
+    CommentsPart,
     NumberingPart,
     PartFactory,
     SettingsPart,

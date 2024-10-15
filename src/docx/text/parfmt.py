@@ -10,6 +10,13 @@ class ParagraphFormat(ElementProxy):
     spacing, space before and after, and widow/orphan control."""
 
     @property
+    def ppr(self):
+        ppr = self._element.pPr
+        if ppr is None:
+            return None
+        return ppr
+
+    @property
     def alignment(self):
         """A member of the :ref:`WdParagraphAlignment` enumeration specifying the
         justification setting for this paragraph.

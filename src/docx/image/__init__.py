@@ -5,6 +5,7 @@ them in a document.
 """
 
 from docx.image.bmp import Bmp
+from docx.image.emf import Emf
 from docx.image.gif import Gif
 from docx.image.jpeg import Exif, Jfif
 from docx.image.png import Png
@@ -13,7 +14,7 @@ from docx.image.svg import Svg
 
 SIGNATURES = (
     # class, offset, signature_bytes
-    (Png, 0, b"\x89PNG\x0D\x0A\x1A\x0A"),
+    (Png, 0, b"\x89PNG\x0d\x0a\x1a\x0a"),
     (Jfif, 6, b"JFIF"),
     (Exif, 6, b"Exif"),
     (Gif, 0, b"GIF87a"),
@@ -23,4 +24,5 @@ SIGNATURES = (
     (Bmp, 0, b"BM"),
     (Svg, 0, b"<svg "),
     (Svg, 0, b"<?xml version="),
+    (Emf, 40, b" EMF"),
 )
