@@ -9,8 +9,8 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 import re
 from datetime import datetime, timedelta
 
-from docx.oxml.ns import nsdecls, qn
 from docx.oxml import parse_xml
+from docx.oxml.ns import nsdecls, qn
 from docx.oxml.xmlchemy import BaseOxmlElement
 
 

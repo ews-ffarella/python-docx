@@ -1,5 +1,6 @@
 .venv
 /build/
+/dist/
 .coverage
 /docs/.build/
 /src/*.egg-info

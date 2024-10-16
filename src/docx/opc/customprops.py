@@ -7,11 +7,11 @@ Support reading and writing custom properties to and from a .docx file.
 from __future__ import absolute_import, division, print_function, unicode_literals
 
 import numbers
+from collections import UserDict
 
 from lxml import etree
 
 from docx.oxml.ns import nspfxmap, qn
-from collections import UserDict
 
 
 class CustomProperties(UserDict):

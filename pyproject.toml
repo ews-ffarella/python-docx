@@ -3,8 +3,8 @@ requires = ["setuptools>=61.0.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "python-docx-bb"
-authors = [{name = "Steve Canny", email = "stcanny@gmail.com"}]
+name = "python-docx-ff"
+authors = [{ name = "Steve Canny", email = "stcanny@gmail.com" }]
 classifiers = [
     "Development Status :: 5 - Production/Stable",
     "Environment :: Console",
@@ -21,10 +21,7 @@ classifiers = [
     "Topic :: Office/Business :: Office Suites",
     "Topic :: Software Development :: Libraries",
 ]
-dependencies = [
-    "lxml>=3.1.0",
-    "typing_extensions>=4.9.0",
-]
+dependencies = ["lxml>=3.1.0", "typing_extensions>=4.9.0"]
 description = "Create, read, and update Microsoft Word .docx files."
 dynamic = ["version"]
 keywords = ["docx", "office", "openxml", "word"]
@@ -37,10 +34,6 @@ Changelog = "https://github.com/python-openxml/python-docx/blob/master/HISTORY.r
 Documentation = "https://python-docx.readthedocs.org/en/latest/"
 Homepage = "https://github.com/python-openxml/python-docx"
 Repository = "https://github.com/python-openxml/python-docx"
-
-[tool.black]
-line-length = 100
-target-version = ["py37", "py38", "py39", "py310", "py311"]
 
 [tool.pyright]
 include = ["src/docx", "tests"]
@@ -81,28 +74,63 @@ python_functions = ["it_", "its_", "they_", "and_", "but_"]
 
 [tool.ruff]
 exclude = []
+include = ["pyproject.toml", "src/docx/**/*.py", "tests/**/*.py"]
 line-length = 100
+indent-width = 4
 target-version = "py38"
+
+
+[tool.ruff.format]
+# Like Black, use double quotes for strings.
+quote-style = "double"
+# Like Black, indent with spaces, rather than tabs.
+indent-style = "space"
+# Like Black, respect magic trailing commas.
+skip-magic-trailing-comma = false
+# Like Black, automatically detect the appropriate line ending.
+line-ending = "auto"
+# Enable auto-formatting of code examples in docstrings. Markdown,
+# reStructuredText code/literal blocks and doctests are all supported.
+# This is currently disabled by default, but it is planned for this
+# to be opt-out in the future.
+docstring-code-format = false
+# Set the line length limit used when formatting code snippets in
+# docstrings.
+# This only has an effect when the `docstring-code-format` setting is
+# enabled.
+docstring-code-line-length = "dynamic"
+
 
 [tool.ruff.lint]
 ignore = [
-    "COM812",   # -- over-aggressively insists on trailing commas where not desired --
-    "PT001",    # -- wants @pytest.fixture() instead of @pytest.fixture --
-    "PT005",    # -- wants @pytest.fixture() instead of @pytest.fixture --
+    "COM812", # -- over-aggressively insists on trailing commas where not desired --
+    "PT001",  # -- wants @pytest.fixture() instead of @pytest.fixture --
+    "PT005",  # -- wants @pytest.fixture() instead of @pytest.fixture --
+    "SIM103",
+    "SIM210",
+    "E501",
+    "E402",
+    "E722",
+    "E731",
+    "F401",
+    "F811",
+    "F821",
+    "F841",
+    "C416",
 ]
 select = [
-    "C4",       # -- flake8-comprehensions --
-    "COM",      # -- flake8-commas --
-    "E",        # -- pycodestyle errors --
-    "F",        # -- pyflakes --
-    "I",        # -- isort (imports) --
-    "PLR0402",  # -- Name compared with itself like `foo == foo` --
-    "PT",       # -- flake8-pytest-style --
-    "SIM",      # -- flake8-simplify --
-    "UP015",    # -- redundant `open()` mode parameter (like "r" is default) --
-    "UP018",    # -- Unnecessary {literal_type} call like `str("abc")`. (rewrite as a literal) --
-    "UP032",    # -- Use f-string instead of `.format()` call --
-    "UP034",    # -- Avoid extraneous parentheses --
+    "C4",      # -- flake8-comprehensions --
+    "COM",     # -- flake8-commas --
+    "E",       # -- pycodestyle errors --
+    "F",       # -- pyflakes --
+    "I",       # -- isort (imports) --
+    "PLR0402", # -- Name compared with itself like `foo == foo` --
+    "PT",      # -- flake8-pytest-style --
+    "SIM",     # -- flake8-simplify --
+    "UP015",   # -- redundant `open()` mode parameter (like "r" is default) --
+    "UP018",   # -- Unnecessary {literal_type} call like `str("abc")`. (rewrite as a literal) --
+    "UP032",   # -- Use f-string instead of `.format()` call --
+    "UP034",   # -- Avoid extraneous parentheses --
 ]
 
 [tool.ruff.lint.isort]
@@ -110,4 +138,4 @@ known-first-party = ["docx"]
 known-local-folder = ["helpers"]
 
 [tool.setuptools.dynamic]
-version = {attr = "docx.__version__"}
+version = { attr = "docx.__version__" }

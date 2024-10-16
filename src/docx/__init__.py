@@ -47,6 +47,7 @@ PartFactory.part_type_for[CT.WML_COMMENTS] = CommentsPart
 PartFactory.part_type_for[CT.OPC_CORE_PROPERTIES] = CorePropertiesPart
 PartFactory.part_type_for[CT.OPC_CUSTOM_PROPERTIES] = CustomPropertiesPart
 PartFactory.part_type_for[CT.WML_DOCUMENT_MAIN] = DocumentPart
+PartFactory.part_type_for[CT.WML_DOCUMENT_MACRO_ENABLED_MAIN] = DocumentPart
 PartFactory.part_type_for[CT.WML_FOOTER] = FooterPart
 PartFactory.part_type_for[CT.WML_HEADER] = HeaderPart
 PartFactory.part_type_for[CT.WML_NUMBERING] = NumberingPart

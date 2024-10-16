@@ -136,6 +136,7 @@ class CONTENT_TYPE:
     WML_DOCUMENT_MAIN = (
         "application/vnd.openxmlformats-officedocument.wordprocessingml.docu" "ment.main+xml"
     )
+    WML_DOCUMENT_MACRO_ENABLED_MAIN = "application/vnd.ms-word.document.macroEnabled.main+xml"
     WML_ENDNOTES = "application/vnd.openxmlformats-officedocument.wordprocessingml.endnotes+xml"
     WML_FONT_TABLE = (
         "application/vnd.openxmlformats-officedocument.wordprocessingml.font" "Table+xml"

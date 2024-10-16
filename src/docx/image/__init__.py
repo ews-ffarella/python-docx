@@ -9,8 +9,8 @@ from docx.image.emf import Emf
 from docx.image.gif import Gif
 from docx.image.jpeg import Exif, Jfif
 from docx.image.png import Png
-from docx.image.tiff import Tiff
 from docx.image.svg import Svg
+from docx.image.tiff import Tiff
 
 SIGNATURES = (
     # class, offset, signature_bytes
